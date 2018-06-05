@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,6 +32,12 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @BindView(R.id.attendance_fragment_tab_layout)
     TabLayout tabLayout;
 
+    @BindView(R.id.attendance_fragment_details_container)
+    View details;
+
+    @BindView(R.id.attendance_fragment_summary_container)
+    View summary;
+
     @Inject
     @Named("Attendance")
     BasePagerAdapter pagerAdapter;
@@ -49,6 +58,38 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
             presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
         }
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        summary.setVisibility(View.INVISIBLE);
+        details.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.attendance_action_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_attendance_summary_switch:
+                boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
+
+                item.setTitle(isDetailsVisible ? R.string.action_title_details : R.string.action_title_summary);
+                details.setVisibility(isDetailsVisible ? View.INVISIBLE : View.VISIBLE);
+                summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

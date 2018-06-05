@@ -158,4 +158,5 @@
     <string name="grades_summary_final_average">Final average</string>
     <string name="action_title_summary">Summary</string>
     <string name="action_title_details">Details</string>
+    <string name="summary_attendance_all">Attendance</string>
 </resources>

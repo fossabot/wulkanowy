@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.grades;
+package io.github.wulkanowy.ui.main.attendance;
 
 import android.view.View;
 import android.widget.TextView;
@@ -11,19 +11,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
+import eu.davidea.flexibleadapter.items.AbstractHeaderItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 
-public class GradesSummarySubItem
-        extends AbstractSectionableItem<GradesSummarySubItem.SubItemViewHolder, GradesSummaryHeader> {
+class AttendanceSummaryHeader extends AbstractHeaderItem<AttendanceSummaryHeader.HeaderViewHolder> {
 
     private Subject subject;
 
-    GradesSummarySubItem(GradesSummaryHeader header, Subject subject) {
-        super(header);
+    public AttendanceSummaryHeader(Subject subject) {
         this.subject = subject;
     }
 
@@ -33,7 +31,7 @@ public class GradesSummarySubItem
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        GradesSummarySubItem that = (GradesSummarySubItem) o;
+        AttendanceSummaryHeader that = (AttendanceSummaryHeader) o;
 
         return new EqualsBuilder()
                 .append(subject, that.subject)
@@ -49,35 +47,31 @@ public class GradesSummarySubItem
 
     @Override
     public int getLayoutRes() {
-        return R.layout.grades_summary_subitem;
+        return R.layout.attendance_summary_header;
     }
 
     @Override
-    public SubItemViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
-        return new SubItemViewHolder(view, adapter);
+    public HeaderViewHolder createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+        return new HeaderViewHolder(view, adapter);
     }
 
     @Override
-    public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, SubItemViewHolder holder, int position, List<Object> payloads) {
+    public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, HeaderViewHolder holder, int position, List<Object> payloads) {
         holder.onBind(subject);
     }
 
-    static class SubItemViewHolder extends FlexibleViewHolder {
+    static class HeaderViewHolder extends FlexibleViewHolder {
 
-        @BindView(R.id.grades_summary_subitem_final_grade)
-        TextView finalGrade;
+        @BindView(R.id.attendance_summary_header_name)
+        TextView name;
 
-        @BindView(R.id.grades_summary_subitem_predicted_grade)
-        TextView predictedGrade;
-
-        SubItemViewHolder(View view, FlexibleAdapter adapter) {
+        HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
         }
 
         void onBind(Subject item) {
-            predictedGrade.setText(item.getPredictedRating());
-            finalGrade.setText(item.getFinalRating());
+            name.setText(item.getName());
         }
     }
 }

@@ -111,7 +111,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
                             }
                         }).show();
                 return true;
-            case R.id.action_summary_switch:
+            case R.id.action_grades_summary_switch:
                 boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
 
                 item.setTitle(isDetailsVisible ? R.string.action_title_details : R.string.action_title_summary);
@@ -119,7 +119,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
                 summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return false;
         }
     }
 
