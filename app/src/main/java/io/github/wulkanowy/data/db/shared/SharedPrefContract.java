@@ -21,6 +21,8 @@ public interface SharedPrefContract {
 
     boolean isShowAttendancePresent();
 
+    int getCurrentTheme();
+
     int getServicesInterval();
 
     boolean isMobileDisable();
@@ -28,4 +30,6 @@ public interface SharedPrefContract {
     boolean isServicesEnable();
 
     boolean isNotifyEnable();
+
+    void cleanSharedPref();
 }

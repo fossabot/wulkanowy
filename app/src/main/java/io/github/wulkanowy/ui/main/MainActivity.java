@@ -2,9 +2,9 @@ package io.github.wulkanowy.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,6 +18,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
@@ -26,6 +27,7 @@ import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
@@ -41,12 +43,18 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @BindView(R.id.main_activity_progress_bar)
     View progressBar;
 
+    @BindView(R.id.main_activity_appbar)
+    AppBarLayout appBar;
+
     @Named("Main")
     @Inject
     BasePagerAdapter pagerAdapter;
 
     @Inject
     MainContract.Presenter presenter;
+
+    @Inject
+    RepositoryContract repository;
 
     public static Intent getStartIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -56,7 +64,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.main_activity_toolbar));
         injectViews();
 
         presenter.attachView(this, getIntent().getIntExtra(EXTRA_CARD_ID_KEY, -1));
@@ -88,6 +96,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Override
     public boolean onTabSelected(int position, boolean wasSelected) {
         presenter.onTabSelected(position, wasSelected);
+        appBar.setExpanded(true, true);
+        invalidateOptionsMenu();
         return true;
     }
 
@@ -119,8 +129,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
                 R.drawable.ic_menu_other_24dp));
 
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
-        bottomNavigation.setInactiveColor(Color.BLACK);
-        bottomNavigation.setBackgroundColor(getResources().getColor(R.color.colorBackgroundBottomNav));
+        bottomNavigation.setInactiveColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiary));
+        bottomNavigation.setDefaultBackgroundColor(CommonUtils.getThemeAttrColor(this, R.attr.bottomNavBackground));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setCurrentItem(tabPosition);

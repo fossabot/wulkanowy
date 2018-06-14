@@ -70,6 +70,11 @@ public class SharedPrefRepository implements SharedPrefContract {
     }
 
     @Override
+    public int getCurrentTheme() {
+        return Integer.parseInt(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_THEME, "1"));
+    }
+
+    @Override
     public int getServicesInterval() {
         return Integer.parseInt(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_SERVICES_INTERVAL, "60"));
     }
@@ -87,5 +92,11 @@ public class SharedPrefRepository implements SharedPrefContract {
     @Override
     public boolean isMobileDisable() {
         return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_MOBILE_DISABLED, false);
+    }
+
+    @Override
+    public void cleanSharedPref() {
+        appSharedPref.edit().clear().apply();
+        settingsSharedPref.edit().clear().apply();
     }
 }

@@ -3,6 +3,8 @@ package io.github.wulkanowy.api;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Date;
@@ -26,6 +28,8 @@ public class Client {
     private Date lastSuccessRequest;
 
     private Cookies cookies = new Cookies();
+
+    private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     Client(String email, String password, String symbol) {
         this.email = email;
@@ -58,10 +62,15 @@ public class Client {
             return;
         }
 
+        clearCookies();
         this.symbol = new Login(this).login(email, password, symbol);
+        logger.info("Login successful on {} at {}", getHost(), new Date());
     }
 
     private boolean isLoggedIn() {
+        logger.debug("Last success request: {}", lastSuccessRequest);
+        logger.debug("Cookies: {}", getCookies().size());
+
         return getCookies().size() > 0 && lastSuccessRequest != null &&
                 5 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
 
@@ -75,12 +84,12 @@ public class Client {
         this.symbol = symbol;
     }
 
-    public void addCookies(Map<String, String> items) {
-        cookies.addItems(items);
-    }
-
     private Map<String, String> getCookies() {
         return cookies.getItems();
+    }
+
+    public void clearCookies() {
+        cookies = new Cookies();
     }
 
     String getHost() {
@@ -111,7 +120,11 @@ public class Client {
             this.cookies.addItems(cookies);
         }
 
-        Connection.Response response = Jsoup.connect(getFilledUrl(url))
+        url = getFilledUrl(url);
+
+        logger.debug("GET {}", url);
+
+        Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .cookies(getCookies())
                 .execute();
@@ -128,7 +141,11 @@ public class Client {
     }
 
     public synchronized Document postPageByUrl(String url, String[][] params) throws IOException, VulcanException {
-        Connection connection = Jsoup.connect(getFilledUrl(url));
+        url = getFilledUrl(url);
+
+        logger.debug("POST {}", url);
+
+        Connection connection = Jsoup.connect(url);
 
         for (String[] data : params) {
             connection.data(data[0], data[1]);
@@ -150,7 +167,11 @@ public class Client {
     public String getJsonStringByUrl(String url) throws IOException, VulcanException {
         login();
 
-        Connection.Response response = Jsoup.connect(getFilledUrl(url))
+        url = getFilledUrl(url);
+
+        logger.debug("GET {}", url);
+
+        Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .ignoreContentType(true)
                 .cookies(getCookies())
@@ -164,7 +185,11 @@ public class Client {
     public String postJsonStringByUrl(String url, String[][] params) throws IOException, VulcanException {
         login();
 
-        Connection connection = Jsoup.connect(getFilledUrl(url));
+        url = getFilledUrl(url);
+
+        logger.debug("POST {}", url);
+
+        Connection connection = Jsoup.connect(url);
 
         for (String[] data : params) {
             connection.data(data[0], data[1]);
@@ -196,7 +221,7 @@ public class Client {
         }
 
         if ("Błąd strony".equals(title)) {
-            throw new NotLoggedInErrorException(title + " " + doc.selectFirst("p, body") + ", status: " + code);
+            throw new NotLoggedInErrorException(title + " " + doc.body() + ", status: " + code);
         }
 
         return doc;
