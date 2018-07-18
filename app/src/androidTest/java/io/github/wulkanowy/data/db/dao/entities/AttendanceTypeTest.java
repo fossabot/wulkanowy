@@ -15,7 +15,7 @@ public class AttendanceTypeTest extends AbstractDaoTestLongPk<AttendanceTypeDao,
     protected AttendanceType createEntity(Long key) {
         AttendanceType entity = new AttendanceType();
         entity.setId(key);
-        entity.setTotal();
+        entity.setTotal(100);
         return entity;
     }
 

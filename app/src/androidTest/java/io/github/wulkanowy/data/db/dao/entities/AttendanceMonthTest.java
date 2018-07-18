@@ -15,8 +15,8 @@ public class AttendanceMonthTest extends AbstractDaoTestLongPk<AttendanceMonthDa
     protected AttendanceMonth createEntity(Long key) {
         AttendanceMonth entity = new AttendanceMonth();
         entity.setId(key);
-        entity.setTypeId();
-        entity.setValue();
+        entity.setTypeId(1L);
+        entity.setValue(1);
         return entity;
     }
 
