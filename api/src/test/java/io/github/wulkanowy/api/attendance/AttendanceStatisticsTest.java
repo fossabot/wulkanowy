@@ -59,13 +59,13 @@ public class AttendanceStatisticsTest extends StudentAndParentTestCase {
 
     @Test
     public void getTypeName() throws Exception {
-        List<Type> typeList1 = excellent.getTypesTable().getTypeList();
+        List<AttendanceType> typeList1 = excellent.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals("Obecność", typeList1.get(0).getName());
         Assert.assertEquals("Nieobecność nieusprawiedliwiona", typeList1.get(1).getName());
         Assert.assertEquals("Nieobecność usprawiedliwiona", typeList1.get(2).getName());
         Assert.assertEquals("Nieobecność z przyczyn szkolnych", typeList1.get(3).getName());
 
-        List<Type> typeList2 = full.getTypesTable().getTypeList();
+        List<AttendanceType> typeList2 = full.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals("Spóźnienie nieusprawiedliwione", typeList2.get(4).getName());
         Assert.assertEquals("Spóźnienie usprawiedliwione", typeList2.get(5).getName());
         Assert.assertEquals("Zwolnienie", typeList2.get(6).getName());
@@ -73,7 +73,7 @@ public class AttendanceStatisticsTest extends StudentAndParentTestCase {
 
     @Test
     public void getTypeTotal() throws Exception {
-        List<Type> typeList1 = excellent.getTypesTable().getTypeList();
+        List<AttendanceType> typeList1 = excellent.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(1211, typeList1.get(0).getTotal());
         Assert.assertEquals(0, typeList1.get(1).getTotal());
         Assert.assertEquals(0, typeList1.get(2).getTotal());
@@ -82,7 +82,7 @@ public class AttendanceStatisticsTest extends StudentAndParentTestCase {
         Assert.assertEquals(0, typeList1.get(5).getTotal());
         Assert.assertEquals(0, typeList1.get(6).getTotal());
 
-        List<Type> typeList2 = full.getTypesTable().getTypeList();
+        List<AttendanceType> typeList2 = full.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(822, typeList2.get(0).getTotal());
         Assert.assertEquals(6, typeList2.get(1).getTotal());
         Assert.assertEquals(192, typeList2.get(2).getTotal());
@@ -94,32 +94,32 @@ public class AttendanceStatisticsTest extends StudentAndParentTestCase {
 
     @Test
     public void getTypeList() throws Exception {
-        List<Type> typesList1 = excellent.getTypesTable().getTypeList();
+        List<AttendanceType> typesList1 = excellent.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(12, typesList1.get(0).getMonthList().size());
         Assert.assertEquals(12, typesList1.get(5).getMonthList().size());
 
-        List<Type> typesList2 = full.getTypesTable().getTypeList();
+        List<AttendanceType> typesList2 = full.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(12, typesList2.get(0).getMonthList().size());
         Assert.assertEquals(12, typesList2.get(5).getMonthList().size());
     }
 
     @Test
     public void getMonthList() throws Exception {
-        List<Type> typeList1 = excellent.getTypesTable().getTypeList();
+        List<AttendanceType> typeList1 = excellent.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(12, typeList1.get(0).getMonthList().size());
 
-        List<Type> typeList2 = full.getTypesTable().getTypeList();
+        List<AttendanceType> typeList2 = full.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(12, typeList2.get(0).getMonthList().size());
     }
 
     @Test
     public void getMonthName() throws Exception {
-        List<Month> monthsList1 = excellent.getTypesTable().getTypeList().get(0).getMonthList();
+        List<Month> monthsList1 = excellent.getTypesTable().getAttendanceTypeList().get(0).getMonthList();
         Assert.assertEquals("IX", monthsList1.get(0).getName());
         Assert.assertEquals("III", monthsList1.get(6).getName());
         Assert.assertEquals("VIII", monthsList1.get(11).getName());
 
-        List<Month> monthsList2 = full.getTypesTable().getTypeList().get(0).getMonthList();
+        List<Month> monthsList2 = full.getTypesTable().getAttendanceTypeList().get(0).getMonthList();
         Assert.assertEquals("XI", monthsList2.get(2).getName());
         Assert.assertEquals("II", monthsList2.get(5).getName());
         Assert.assertEquals("VI", monthsList2.get(9).getName());
@@ -127,14 +127,14 @@ public class AttendanceStatisticsTest extends StudentAndParentTestCase {
 
     @Test
     public void getMonthValue() throws Exception {
-        List<Month> monthsList1 = excellent.getTypesTable().getTypeList().get(0).getMonthList();
+        List<Month> monthsList1 = excellent.getTypesTable().getAttendanceTypeList().get(0).getMonthList();
         Assert.assertEquals(142, monthsList1.get(0).getValue());
         Assert.assertEquals(131, monthsList1.get(4).getValue());
         Assert.assertEquals(139, monthsList1.get(7).getValue());
         Assert.assertEquals(114, monthsList1.get(9).getValue());
         Assert.assertEquals(0, monthsList1.get(11).getValue());
 
-        List<Type> typeList1 = full.getTypesTable().getTypeList();
+        List<AttendanceType> typeList1 = full.getTypesTable().getAttendanceTypeList();
         Assert.assertEquals(135, typeList1.get(0).getMonthList().get(0).getValue());
         Assert.assertEquals(7, typeList1.get(3).getMonthList().get(5).getValue());
         Assert.assertEquals(1, typeList1.get(5).getMonthList().get(0).getValue());

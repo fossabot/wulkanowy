@@ -28,6 +28,12 @@ public interface SyncContract {
 
     void syncAttendance(long diaryId, String date) throws ParseException, IOException, VulcanException;
 
+    void syncAttendanceStatisticSubjects();
+
+    void syncAttendanceStatistics();
+
+    void syncAttendanceStatistics(int subjectId);
+
     void syncTimetable() throws VulcanException, IOException, ParseException;
 
     void syncTimetable(long diaryId, String date) throws VulcanException, IOException, ParseException;

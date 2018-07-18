@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.github.wulkanowy.data.db.dao.entities.AttendanceSubject;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceSubjectDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
@@ -128,5 +130,12 @@ public class DbRepository implements DbContract {
 
         DaoMaster.dropAllTables(database, true);
         DaoMaster.createAllTables(database, true);
+    }
+
+    @Override
+    public List<AttendanceSubject> getAttendanceSubjects() {
+        return daoSession.getAttendanceSubjectDao().queryBuilder().where(
+                AttendanceSubjectDao.Properties.DiaryId.eq(getCurrentDiaryId())
+        ).list();
     }
 }

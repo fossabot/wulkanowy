@@ -18,21 +18,24 @@ public class SyncRepository implements SyncContract {
 
     private final AttendanceSync attendanceSync;
 
+    private final AttendanceStatisticsSync attendanceStatisticsSync;
+
     private final TimetableSync timetableSync;
 
     private final AccountSync accountSync;
 
     private final ExamsSync examsSync;
 
-    private final DbContract database;
+    private final DbContract database;;
 
     @Inject
     SyncRepository(GradeSync gradeSync, SubjectSync subjectSync, AttendanceSync attendanceSync,
-                   TimetableSync timetableSync, AccountSync accountSync, ExamsSync examsSync,
-                   DbContract database) {
+                   AttendanceStatisticsSync attendanceStatisticsSync, TimetableSync timetableSync,
+                   AccountSync accountSync, ExamsSync examsSync, DbContract database) {
         this.gradeSync = gradeSync;
         this.subjectSync = subjectSync;
         this.attendanceSync = attendanceSync;
+        this.attendanceStatisticsSync = attendanceStatisticsSync;
         this.timetableSync = timetableSync;
         this.accountSync = accountSync;
         this.examsSync = examsSync;
@@ -82,6 +85,21 @@ public class SyncRepository implements SyncContract {
         } else {
             attendanceSync.syncAttendance(database.getCurrentDiaryId(), date);
         }
+    }
+
+    @Override
+    public void syncAttendanceStatisticSubjects() {
+        attendanceStatisticsSync.syncSubjectList(database.getCurrentDiaryId());
+    }
+
+    @Override
+    public void syncAttendanceStatistics() {
+        syncAttendanceStatistics(-1);
+    }
+
+    @Override
+    public void syncAttendanceStatistics(int subjectId) {
+        attendanceStatisticsSync.syncStatistics(database.getCurrentDiaryId(), subjectId);
     }
 
     @Override
