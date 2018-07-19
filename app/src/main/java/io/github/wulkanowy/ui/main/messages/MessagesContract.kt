@@ -15,6 +15,7 @@ interface MessagesContract {
         fun onRefresh()
 
         fun hideRefreshingBar()
+
         fun onRefreshSuccess()
     }
 

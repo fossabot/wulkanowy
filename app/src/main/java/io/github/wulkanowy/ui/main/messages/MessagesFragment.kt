@@ -9,11 +9,13 @@ import butterknife.BindView
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsList
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter
+import com.stfalcon.chatkit.utils.DateFormatter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import java.util.*
 import javax.inject.Inject
 
-class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener {
+class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
 
     @Inject
     lateinit var presenter: MessagesContract.Presenter
@@ -59,6 +61,7 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
         dialogsAdapter.setOnDialogLongClickListener(this)
 
         dialogsList.setAdapter(dialogsAdapter)
+        dialogsAdapter.setDatesFormatter(this)
 
         refreshLayout.setColorSchemeResources(android.R.color.black)
         refreshLayout.setOnRefreshListener(this)
@@ -79,6 +82,14 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
 
     override fun onRefreshSuccess() {
         showMessage(R.string.sync_completed)
+    }
+
+    override fun format(date: Date?): String {
+        return when {
+            DateFormatter.isToday(date) -> DateFormatter.format(date, DateFormatter.Template.TIME)
+            DateFormatter.isYesterday(date) -> getString(R.string.date_header_yesterday)
+            else -> DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR)
+        }
     }
 
     override fun onDialogLongClick(dialog: Dialog?) {
