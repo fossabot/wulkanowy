@@ -120,6 +120,7 @@ dependencies {
     implementation "com.aurelhubert:ahbottomnavigation:$ahbottom"
     implementation "com.jakewharton.threetenabp:threetenabp:$threeTenABP"
     implementation "com.google.android.gms:play-services-oss-licenses:$ossLicenses"
+    implementation "com.github.stfalcon:chatkit:$chatkit"
     implementation "com.jakewharton.timber:timber:$timber"
     implementation "at.favre.lib:slf4j-timber:$slf4jTimber"
 

@@ -145,7 +145,6 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
 
     private void syncData() throws Exception {
         getRepository().getSyncRepo().syncExams(0, date);
-        getRepository().getSyncRepo().syncMessages();
     }
 
     private void cancelAsyncTasks() {

@@ -162,4 +162,5 @@
     <string name="action_title_summary">Summary</string>
     <string name="action_title_details">Details</string>
     <string name="login_sync_error">An error has occurred during synchronization</string>
+    <string name="messages_text">Messages</string>
 </resources>

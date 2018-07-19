@@ -15,6 +15,9 @@ public class Message {
     @Id(autoincrement = true)
     protected Long id;
 
+    @Property(nameInDb = "user_id")
+    private Long userId;
+
     @Property(nameInDb = "real_id")
     private int realId;
 
@@ -54,11 +57,12 @@ public class Message {
     @Generated(hash = 859287859)
     private transient MessageDao myDao;
 
-    @Generated(hash = 1988122084)
-    public Message(Long id, int realId, int messageID, int senderID, String sender,
-                   boolean unread, String date, String content, String subject,
-                   int folderId) {
+    @Generated(hash = 245394639)
+    public Message(Long id, Long userId, int realId, int messageID, int senderID,
+                   String sender, boolean unread, String date, String content,
+                   String subject, int folderId) {
         this.id = id;
+        this.userId = userId;
         this.realId = realId;
         this.messageID = messageID;
         this.senderID = senderID;
@@ -80,6 +84,14 @@ public class Message {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public int getRealId() {

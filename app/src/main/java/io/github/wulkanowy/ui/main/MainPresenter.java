@@ -51,11 +51,11 @@ public class MainPresenter extends BasePresenter<MainContract.View>
 
     @Override
     public void onFragmentIsReady() {
-        if (fragmentCount < 4) {
+        if (fragmentCount < 3) {
             fragmentCount++;
         }
 
-        if (fragmentCount == 4) {
+        if (fragmentCount == 3) {
             getView().showActionBar();
             getView().showProgressBar(false);
         }

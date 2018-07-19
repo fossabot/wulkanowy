@@ -25,6 +25,7 @@ import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
+import io.github.wulkanowy.ui.main.messages.MessagesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 import io.github.wulkanowy.utils.CommonUtils;
@@ -119,8 +120,11 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.attendance_text),
                 R.drawable.ic_menu_attendance_24dp));
 
-        bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.exams_text),
-                R.drawable.ic_menu_exams_24dp));
+//        bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.exams_text),
+//                R.drawable.ic_menu_exams_24dp));
+
+        bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.messages_text),
+                R.drawable.ic_inbox_black_24dp));
 
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.timetable_text),
                 R.drawable.ic_menu_timetable_24dp));
@@ -141,7 +145,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public void initiationViewPager(int tabPosition) {
         pagerAdapter.addFragment(new GradesFragment());
         pagerAdapter.addFragment(new AttendanceFragment());
-        pagerAdapter.addFragment(new ExamsFragment());
+//        pagerAdapter.addFragment(new ExamsFragment());
+        pagerAdapter.addFragment(new MessagesFragment());
         pagerAdapter.addFragment(new TimetableFragment());
         pagerAdapter.addFragment(new SettingsFragment());
 

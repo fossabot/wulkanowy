@@ -38,13 +38,13 @@ class WulkanowyApp : DaggerApplication() {
             try {
                 repository.syncRepo.initLastUser()
                 FabricUtils.logLogin("Open app", true)
-            } catch (e: Exception) {
-                FabricUtils.logLogin("Open app", false)
-                Timber.e(e, "An error occurred when the application was started")
             } catch (e: ScramblerException) {
                 FabricUtils.logLogin("Open app", false)
                 Timber.e(e, "A security error has occurred")
                 repository.cleanAllData()
+            } catch (e: Exception) {
+                FabricUtils.logLogin("Open app", false)
+                Timber.e(e, "An error occurred when the application was started")
             }
 
         }

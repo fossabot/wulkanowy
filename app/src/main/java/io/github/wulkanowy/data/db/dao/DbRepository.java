@@ -11,6 +11,8 @@ import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
+import io.github.wulkanowy.data.db.dao.entities.Message;
+import io.github.wulkanowy.data.db.dao.entities.MessageDao;
 import io.github.wulkanowy.data.db.dao.entities.SchoolDao;
 import io.github.wulkanowy.data.db.dao.entities.Semester;
 import io.github.wulkanowy.data.db.dao.entities.SemesterDao;
@@ -58,6 +60,13 @@ public class DbRepository implements DbContract {
         return daoSession.getGradeDao().queryBuilder().where(
                 GradeDao.Properties.IsNew.eq(1),
                 GradeDao.Properties.SemesterId.eq(getSemesterId(semesterName))
+        ).list();
+    }
+
+    @Override
+    public List<Message> getMessages() {
+        return daoSession.getMessageDao().queryBuilder().where(
+                MessageDao.Properties.UserId.eq(sharedPref.getCurrentUserId())
         ).list();
     }
 

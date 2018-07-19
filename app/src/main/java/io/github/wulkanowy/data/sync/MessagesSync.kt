@@ -6,11 +6,12 @@ import io.github.wulkanowy.api.messages.Message as ApiMessage
 import io.github.wulkanowy.data.db.dao.entities.DaoSession
 import io.github.wulkanowy.data.db.dao.entities.Message
 import io.github.wulkanowy.data.db.dao.entities.MessageDao
+import io.github.wulkanowy.data.db.shared.SharedPrefContract
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MessagesSync @Inject constructor(private val daoSession: DaoSession, private val vulcan: Vulcan) {
+class MessagesSync @Inject constructor(private val daoSession: DaoSession, private val sharedPref: SharedPrefContract, private val vulcan: Vulcan) {
 
     fun syncAllMessagesHeaders() {
         daoSession.messageDao.deleteAll()
@@ -28,14 +29,14 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
 
     private fun syncMessages(messages: List<ApiMessage>, folder: Int) {
         daoSession.messageDao.insertInTx(messages.map {
-            Message(null, it.id, it.messageID ?: it.id, it.senderID, it.sender, it.unread, it.date, it.content, it.subject, folder)
+            Message(null, sharedPref.currentUserId, it.id, it.messageID ?: it.id, it.senderID, it.sender, it.unread, it.date, it.content, it.subject, folder)
         })
     }
 
     private fun syncMessagesContent(messages: List<ApiMessage>, folder: Int) {
         daoSession.messageDao.insertInTx(messages.map {
             val message = vulcan.messages.getMessage(it.messageID ?: it.id, folder)
-            Message(null, message.id, it.messageID ?: it.id, it.senderID, it.sender, it.unread, it.date, message.content, it.subject, folder)
+            Message(null, sharedPref.currentUserId, message.id, it.messageID ?: it.id, it.senderID, it.sender, it.unread, it.date, message.content, it.subject, folder)
         })
     }
 

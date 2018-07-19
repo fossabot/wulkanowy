@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db.dao;
 import java.util.List;
 
 import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Message;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Symbol;
 import io.github.wulkanowy.data.db.dao.entities.Week;
@@ -16,6 +17,8 @@ public interface DbContract {
     List<Subject> getSubjectList(int semesterName);
 
     List<Grade> getNewGrades(int semesterName);
+
+    List<Message> getMessages();
 
     long getCurrentSchoolId();
 

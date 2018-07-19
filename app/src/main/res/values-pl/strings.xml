@@ -166,4 +166,5 @@
     <string name="action_title_summary">Podsumowanie</string>
     <string name="action_title_details">Szczegóły</string>
     <string name="login_sync_error">Podczas synchronizacji wystąpił błąd</string>
+    <string name="messages_text">Wiadomości</string>
 </resources>
