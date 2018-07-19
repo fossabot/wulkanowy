@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.messages
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import java.util.*
 import javax.inject.Inject
+import com.amulyakhare.textdrawable.TextDrawable
 
 class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
 
@@ -22,13 +24,16 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
 
     private lateinit var dialogsAdapter: DialogsListAdapter<Dialog>
 
-    private val imageLoader = ImageLoader { imageView, url -> imageView.setImageDrawable(resources.getDrawable(R.drawable.ic_android_black_24dp)) }
-
     @BindView(R.id.dialogsList)
     lateinit var dialogsList: DialogsList
 
     @BindView(R.id.messages_fragment_swipe_refresh)
     lateinit var refreshLayout: SwipeRefreshLayout
+
+    private val imageLoader = ImageLoader { imageView, name ->
+        val letters = name.split(" ").map { it.substring(0, 1) }
+        imageView.setImageDrawable(TextDrawable.builder().buildRect(letters[0] + letters[1], Color.DKGRAY))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_messages, container, false)
