@@ -67,7 +67,7 @@ public class DbRepository implements DbContract {
     public List<Message> getMessages() {
         return daoSession.getMessageDao().queryBuilder().where(
                 MessageDao.Properties.UserId.eq(sharedPref.getCurrentUserId())
-        ).list();
+        ).orderDesc(MessageDao.Properties.Date).list();
     }
 
     @Override
