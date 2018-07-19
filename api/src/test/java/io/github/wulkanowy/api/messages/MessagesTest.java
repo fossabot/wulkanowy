@@ -28,11 +28,11 @@ public class MessagesTest {
         Messages messages = new Messages(client);
         List<Message> messageList = messages.getReceived();
 
-        Assert.assertEquals(true, messageList.get(1).unread);
-        Assert.assertEquals("2016-03-15 09:00:00", messageList.get(0).date);
-        Assert.assertEquals(null, messageList.get(0).content);
-        Assert.assertEquals("Kowalski Jan", messageList.get(0).sender);
-        Assert.assertEquals(12347, messageList.get(2).id);
+        Assert.assertEquals(true, messageList.get(1).getUnread());
+        Assert.assertEquals("2016-03-15 09:00:00", messageList.get(0).getDate());
+        Assert.assertEquals(null, messageList.get(0).getContent());
+        Assert.assertEquals("Kowalski Jan", messageList.get(0).getSender());
+        Assert.assertEquals(12347, messageList.get(2).getId());
     }
 
     @Test
@@ -67,8 +67,8 @@ public class MessagesTest {
 
         Messages messages = new Messages(client);
         Message message = messages.getMessage(123, Messages.RECEIVED_FOLDER);
-        Assert.assertEquals(12345, message.id);
-        Assert.assertEquals("Witam, …. \nPozdrawiam Krzysztof Czerkas", message.content);
+        Assert.assertEquals(12345, message.getId());
+        Assert.assertEquals("Witam, …. \nPozdrawiam Krzysztof Czerkas", message.getContent());
     }
 
     @Test(expected = NotLoggedInErrorException.class)

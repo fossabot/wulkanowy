@@ -37,5 +37,7 @@ public interface SyncContract {
 
     void syncExams(long diaryId, String date) throws VulcanException, IOException, ParseException;
 
+    void syncMessages();
+
     void syncAll() throws VulcanException, IOException, ParseException;
 }

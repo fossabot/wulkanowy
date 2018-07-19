@@ -26,10 +26,12 @@ public class SyncRepository implements SyncContract {
 
     private final DbContract database;
 
+    private final MessagesSync messagesSync;
+
     @Inject
     SyncRepository(GradeSync gradeSync, SubjectSync subjectSync, AttendanceSync attendanceSync,
                    TimetableSync timetableSync, AccountSync accountSync, ExamsSync examsSync,
-                   DbContract database) {
+                   DbContract database, MessagesSync messagesSync) {
         this.gradeSync = gradeSync;
         this.subjectSync = subjectSync;
         this.attendanceSync = attendanceSync;
@@ -37,6 +39,7 @@ public class SyncRepository implements SyncContract {
         this.accountSync = accountSync;
         this.examsSync = examsSync;
         this.database = database;
+        this.messagesSync = messagesSync;
     }
 
     @Override
@@ -110,6 +113,11 @@ public class SyncRepository implements SyncContract {
         } else {
             examsSync.syncExams(database.getCurrentDiaryId(), date);
         }
+    }
+
+    @Override
+    public void syncMessages() {
+        messagesSync.syncAllMessages();
     }
 
     @Override
