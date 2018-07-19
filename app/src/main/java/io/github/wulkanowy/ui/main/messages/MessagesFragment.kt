@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.main.messages
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import javax.inject.Inject
 
-class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog> {
+class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     lateinit var presenter: MessagesContract.Presenter
@@ -23,6 +24,9 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
 
     @BindView(R.id.dialogsList)
     lateinit var dialogsList: DialogsList
+
+    @BindView(R.id.messages_fragment_swipe_refresh)
+    lateinit var refreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_messages, container, false)
@@ -55,11 +59,26 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
         dialogsAdapter.setOnDialogLongClickListener(this)
 
         dialogsList.setAdapter(dialogsAdapter)
+
+        refreshLayout.setColorSchemeResources(android.R.color.black)
+        refreshLayout.setOnRefreshListener(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
+    }
+
+    override fun onRefresh() {
+        presenter.onRefresh()
+    }
+
+    override fun hideRefreshingBar() {
+        refreshLayout.isRefreshing = false
+    }
+
+    override fun onRefreshSuccess() {
+        showMessage(R.string.sync_completed)
     }
 
     override fun onDialogLongClick(dialog: Dialog?) {

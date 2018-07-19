@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_messages"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.github.wulkanowy.ui.main.messages.MessagesFragment">
 
-    <com.stfalcon.chatkit.dialogs.DialogsList
-        android:id="@+id/dialogsList"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/messages_fragment_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent">
+
+        <com.stfalcon.chatkit.dialogs.DialogsList
+            android:id="@+id/dialogsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -11,36 +11,15 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePresenter<MessagesContract.View>(repo), MessagesContract.Presenter,
-        AsyncListeners.OnFirstLoadingListener {
+        AsyncListeners.OnFirstLoadingListener, AsyncListeners.OnRefreshListener {
 
     private lateinit var loadingTask: AbstractTask
+
+    private lateinit var refreshTask: AbstractTask
 
     private lateinit var dialogs: List<Dialog>
 
     private var isFirstSight: Boolean = false
-
-    override fun onDoInBackgroundLoading() {
-//        repository.syncRepo.syncMessages()
-        dialogs = repository.dbRepo.messages.map {
-            val users = arrayListOf<User>()
-            users.add(User(it.senderID.toString(), it.sender, it.sender))
-            val messages = Message(it.realId.toString(), it.content, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), users[0])
-
-            Dialog(it.realId.toString(), it.sender ?: "", it.sender ?: "", users, messages, 1)
-        }
-    }
-
-    override fun onCanceledLoadingAsync() {
-    }
-
-    override fun onEndLoadingAsync(success: Boolean, exception: Exception?) {
-        if (success) {
-            view.setDialogs(dialogs)
-        } else {
-            view.showMessage(exception!!.message as String)
-            Timber.e(exception)
-        }
-    }
 
     override fun attachView(view: MessagesContract.View) {
         super.attachView(view)
@@ -71,5 +50,65 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     override fun detachView() {
         isFirstSight = false
         super.detachView()
+    }
+
+    // loading
+
+    override fun onDoInBackgroundLoading() {
+        dialogs = repository.dbRepo.messages.map {
+            val users = arrayListOf<User>()
+            users.add(User(it.senderID.toString(), it.sender, it.sender))
+            val messages = Message(it.realId.toString(), it.content ?: it.subject, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), users[0])
+
+            Dialog(it.realId.toString(), it.sender ?: "", it.sender ?: "", users, messages, 1)
+        }
+    }
+
+    override fun onCanceledLoadingAsync() {
+    }
+
+    override fun onEndLoadingAsync(success: Boolean, exception: Exception?) {
+        if (success) {
+            view.setDialogs(dialogs)
+        } else {
+            view.showMessage(exception!!.message as String)
+            Timber.e(exception)
+        }
+    }
+
+    // refresh
+
+    override fun onRefresh() {
+        if (view.isNetworkConnected) {
+            refreshTask = AbstractTask()
+            refreshTask.setOnRefreshListener(this)
+            refreshTask.execute()
+        } else {
+            view.showNoNetworkMessage()
+            view.hideRefreshingBar()
+        }
+    }
+
+    override fun onDoInBackgroundRefresh() {
+        repository.syncRepo.syncMessages()
+    }
+
+    override fun onCanceledRefreshAsync() {
+        if (isViewAttached) {
+            view.hideRefreshingBar()
+        }
+    }
+
+    override fun onEndRefreshAsync(result: Boolean, exception: Exception?) {
+        if (result) {
+            loadingTask = AbstractTask()
+            loadingTask.setOnFirstLoadingListener(this)
+            loadingTask.execute()
+
+            view.onRefreshSuccess()
+        } else {
+            view.showMessage(repository.resRepo.getErrorLoginMessage(exception))
+        }
+        view.hideRefreshingBar()
     }
 }

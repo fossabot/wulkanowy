@@ -11,6 +11,11 @@ interface MessagesContract {
         fun setActivityTitle()
 
         fun setDialogs(dialogs: List<Dialog>)
+
+        fun onRefresh()
+
+        fun hideRefreshingBar()
+        fun onRefreshSuccess()
     }
 
     interface Presenter : BaseContract.Presenter<View> {
@@ -18,5 +23,7 @@ interface MessagesContract {
         fun onFragmentVisible(isVisible: Boolean)
 
         override fun attachView(view: View)
+
+        fun onRefresh()
     }
 }
