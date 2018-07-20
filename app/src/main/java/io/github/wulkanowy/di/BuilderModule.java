@@ -9,6 +9,8 @@ import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.ui.login.LoginModule;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.ui.main.MainModule;
+import io.github.wulkanowy.ui.main.messages.MessagesActivity;
+import io.github.wulkanowy.ui.main.messages.MessagesModule;
 import io.github.wulkanowy.ui.splash.SplashActivity;
 import io.github.wulkanowy.ui.splash.SplashModule;
 import io.github.wulkanowy.ui.widgets.TimetableWidgetProvider;
@@ -27,6 +29,10 @@ abstract class BuilderModule {
     @PerActivity
     @ContributesAndroidInjector(modules = MainModule.class)
     abstract MainActivity bindMainActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = MessagesModule.class)
+    abstract MessagesActivity bindMessageActivity();
 
     @ContributesAndroidInjector
     abstract SyncJob bindSyncJob();

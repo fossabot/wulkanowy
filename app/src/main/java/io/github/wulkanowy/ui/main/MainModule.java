@@ -15,7 +15,7 @@ import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.exams.ExamsModule;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.grades.GradesModule;
-import io.github.wulkanowy.ui.main.messages.MessagesFragment;
+import io.github.wulkanowy.ui.main.messages.DialogsFragment;
 import io.github.wulkanowy.ui.main.messages.MessagesModule;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableModule;
@@ -48,7 +48,7 @@ public abstract class MainModule {
 
     @PerFragment
     @ContributesAndroidInjector(modules = MessagesModule.class)
-    abstract MessagesFragment bindMessagesFragment();
+    abstract DialogsFragment bindMessagesFragment();
 
     @PerFragment
     @ContributesAndroidInjector(modules = AttendanceModule.class)

@@ -2,13 +2,13 @@ package io.github.wulkanowy.data.sync
 
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.api.messages.Messages
-import io.github.wulkanowy.api.messages.Message as ApiMessage
 import io.github.wulkanowy.data.db.dao.entities.DaoSession
 import io.github.wulkanowy.data.db.dao.entities.Message
 import io.github.wulkanowy.data.db.dao.entities.MessageDao
 import io.github.wulkanowy.data.db.shared.SharedPrefContract
 import javax.inject.Inject
 import javax.inject.Singleton
+import io.github.wulkanowy.api.messages.Message as ApiMessage
 
 @Singleton
 class MessagesSync @Inject constructor(private val daoSession: DaoSession, private val sharedPref: SharedPrefContract, private val vulcan: Vulcan) {
@@ -43,6 +43,18 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
     fun syncMessage(id: Int, folder: Int) {
         val dbMessage = daoSession.messageDao.queryBuilder().where(MessageDao.Properties.Id.eq(id)).unique()
         val apiMessage = vulcan.messages.getMessage(dbMessage.messageID, folder)
+        dbMessage.content = apiMessage.content
+        dbMessage.realId = apiMessage.id
+        dbMessage.update()
+    }
+
+    fun syncMessageBySender(senderId: Int) {
+        val dbMessage = daoSession.messageDao.queryBuilder().where(
+                MessageDao.Properties.SenderID.eq(senderId),
+                MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
+        ).orderDesc(MessageDao.Properties.Date).limit(1).unique()
+
+        val apiMessage = vulcan.messages.getMessage(dbMessage.messageID, Messages.RECEIVED_FOLDER)
         dbMessage.content = apiMessage.content
         dbMessage.realId = apiMessage.id
         dbMessage.update()

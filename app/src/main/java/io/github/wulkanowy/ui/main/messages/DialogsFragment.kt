@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.messages
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
+import com.amulyakhare.textdrawable.TextDrawable
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsList
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter
@@ -15,12 +17,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import java.util.*
 import javax.inject.Inject
-import com.amulyakhare.textdrawable.TextDrawable
 
-class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
+class DialogsFragment : BaseFragment(), DialogsContract.View, DialogsListAdapter.OnDialogClickListener<Dialog>,
+        DialogsListAdapter.OnDialogLongClickListener<Dialog>, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
 
     @Inject
-    lateinit var presenter: MessagesContract.Presenter
+    lateinit var presenter: DialogsContract.Presenter
 
     private lateinit var dialogsAdapter: DialogsListAdapter<Dialog>
 
@@ -102,6 +104,7 @@ class MessagesFragment : BaseFragment(), MessagesContract.View, DialogsListAdapt
     }
 
     override fun onDialogClick(dialog: Dialog?) {
-
+        context!!.startActivity(Intent(context, MessagesActivity::class.java)
+                .putExtra(MessagesActivity.SENDER_ID_KEY, dialog!!.users[0].id.toInt()))
     }
 }

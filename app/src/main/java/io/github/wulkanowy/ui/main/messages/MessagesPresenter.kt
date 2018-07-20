@@ -1,44 +1,31 @@
 package io.github.wulkanowy.ui.main.messages
 
+import com.stfalcon.chatkit.commons.models.IMessage
 import io.github.wulkanowy.api.getDate
 import io.github.wulkanowy.api.getDateAsTick
 import io.github.wulkanowy.data.RepositoryContract
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.async.AbstractTask
 import io.github.wulkanowy.utils.async.AsyncListeners
+import org.jetbrains.annotations.NotNull
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
 
-class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePresenter<MessagesContract.View>(repo), MessagesContract.Presenter,
-        AsyncListeners.OnFirstLoadingListener, AsyncListeners.OnRefreshListener {
+class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePresenter<MessagesContract.View>(repo),
+        MessagesContract.Presenter, AsyncListeners.OnFirstLoadingListener {
 
     private lateinit var loadingTask: AbstractTask
 
-    private lateinit var refreshTask: AbstractTask
+    private lateinit var message: IMessage
 
-    private lateinit var dialogs: List<Dialog>
+    private var senderId = 0
 
-    private var isFirstSight: Boolean = false
-
-    override fun attachView(view: MessagesContract.View) {
+    override fun attachView(view: @NotNull MessagesContract.View, senderId: Int) {
         super.attachView(view)
-
-        if (getView().isMenuVisible()) {
-            getView().setActivityTitle()
-        }
-
-        if (!isFirstSight) {
-            isFirstSight = true
-        }
+        this.senderId = senderId
 
         loadMessages()
-    }
-
-    override fun onFragmentVisible(isVisible: Boolean) {
-        if (isVisible) {
-            view.setActivityTitle()
-        }
     }
 
     private fun loadMessages() {
@@ -47,21 +34,18 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
         loadingTask.execute()
     }
 
-    override fun detachView() {
-        isFirstSight = false
-        super.detachView()
-    }
-
-    // loading
-
     override fun onDoInBackgroundLoading() {
-        dialogs = repository.dbRepo.messages.map {
-            val users = arrayListOf<User>()
-            users.add(User(it.senderID.toString(), it.sender, it.sender))
-            val messages = Message(it.realId.toString(), it.content ?: it.subject, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), users[0])
+        repository.syncRepo.syncMessageBySender(senderId)
+        val mes = repository.dbRepo.getMessagesBySender(senderId)[0]
 
-            Dialog(it.realId.toString(), it.sender ?: "", it.sender ?: "", users, messages, 1)
-        }
+        val user = User(mes.senderID.toString(), mes.sender, mes.sender)
+
+        message = Message(
+                mes.realId.toString(),
+                mes.content ?: "NPE",
+                getDate(getDateAsTick(mes.date, "yyyy-MM-dd HH:mm:ss")),
+                user
+        )
     }
 
     override fun onCanceledLoadingAsync() {
@@ -69,46 +53,10 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     override fun onEndLoadingAsync(success: Boolean, exception: Exception?) {
         if (success) {
-            view.setDialogs(dialogs)
+            view.addToStart(message)
         } else {
             view.showMessage(exception!!.message as String)
             Timber.e(exception)
         }
-    }
-
-    // refresh
-
-    override fun onRefresh() {
-        if (view.isNetworkConnected) {
-            refreshTask = AbstractTask()
-            refreshTask.setOnRefreshListener(this)
-            refreshTask.execute()
-        } else {
-            view.showNoNetworkMessage()
-            view.hideRefreshingBar()
-        }
-    }
-
-    override fun onDoInBackgroundRefresh() {
-        repository.syncRepo.syncMessages()
-    }
-
-    override fun onCanceledRefreshAsync() {
-        if (isViewAttached) {
-            view.hideRefreshingBar()
-        }
-    }
-
-    override fun onEndRefreshAsync(result: Boolean, exception: Exception?) {
-        if (result) {
-            loadingTask = AbstractTask()
-            loadingTask.setOnFirstLoadingListener(this)
-            loadingTask.execute()
-
-            view.onRefreshSuccess()
-        } else {
-            view.showMessage(repository.resRepo.getErrorLoginMessage(exception))
-        }
-        view.hideRefreshingBar()
     }
 }

@@ -18,6 +18,10 @@ public interface DbContract {
 
     List<Grade> getNewGrades(int semesterName);
 
+    Message getMessage();
+
+    List<Message> getMessagesBySender(int senderId);
+
     List<Message> getMessages();
 
     long getCurrentSchoolId();

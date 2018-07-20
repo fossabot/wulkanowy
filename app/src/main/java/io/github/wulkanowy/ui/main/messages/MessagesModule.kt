@@ -7,5 +7,8 @@ import dagger.Module
 abstract class MessagesModule {
 
     @Binds
+    internal abstract fun provideDialogsPresenter(dialogsPresenter: DialogsPresenter): DialogsContract.Presenter
+
+    @Binds
     internal abstract fun provideMessagesPresenter(messagesPresenter: MessagesPresenter): MessagesContract.Presenter
 }

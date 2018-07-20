@@ -64,6 +64,19 @@ public class DbRepository implements DbContract {
     }
 
     @Override
+    public Message getMessage() {
+        return daoSession.getMessageDao().queryBuilder().orderDesc().limit(1).unique();
+    }
+
+    @Override
+    public List<Message> getMessagesBySender(int senderId) {
+        return daoSession.getMessageDao().queryBuilder().where(
+                MessageDao.Properties.UserId.eq(sharedPref.getCurrentUserId()),
+                MessageDao.Properties.SenderID.eq(senderId)
+        ).orderDesc(MessageDao.Properties.Date).list();
+    }
+
+    @Override
     public List<Message> getMessages() {
         return daoSession.getMessageDao().queryBuilder().where(
                 MessageDao.Properties.UserId.eq(sharedPref.getCurrentUserId())
