@@ -122,11 +122,6 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncMessage(int id) {
-        messagesSync.syncMessage(id, Messages.RECEIVED_FOLDER);
-    }
-
-    @Override
     public void syncMessagesBySender(int senderId) {
         messagesSync.syncMessagesBySender(senderId);
     }
@@ -138,5 +133,6 @@ public class SyncRepository implements SyncContract {
         syncAttendance();
         syncTimetable();
         syncExams();
+        syncMessages();
     }
 }

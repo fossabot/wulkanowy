@@ -41,8 +41,10 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundLoading() {
-        repository.syncRepo.syncMessagesBySender(senderId)
         messages = repository.dbRepo.getMessagesBySender(senderId).map {
+            if (it.content == null) {
+                repository.syncRepo.syncMessagesBySender(senderId)
+            }
             Message(
                     it.realId.toString(),
                     "Temat: " + it.subject + "\n\n" + it.content.trim(),
