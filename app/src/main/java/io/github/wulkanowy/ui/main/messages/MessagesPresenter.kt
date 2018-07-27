@@ -26,9 +26,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     private var senderId = 0
 
-    private var pageStart = 0
-
-    private var pageLimit = 1
+    private var start = 0
 
     override fun attachView(view: @NotNull MessagesContract.View, senderId: Int, senderName: String) {
         super.attachView(view)
@@ -48,20 +46,13 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundLoading() {
-        val allMessages = repository.dbRepo.getMessagesBySender(senderId).map {
+        messages = repository.dbRepo.getMessagesBySender(senderId).map {
+            total++
             if (it.content == null) {
                 return@map null
             }
             getMappedMessage(it)
-        }
-
-        if (allMessages.filterNotNull().isEmpty()) { //
-            repository.syncRepo.syncAllFirstMessagesFromSenders()
-        }
-
-        total = allMessages.size
-
-        messages = allMessages.filterNotNull()
+        }.filterNotNull().take(1)
     }
 
     override fun onCanceledLoadingAsync() {
@@ -74,31 +65,25 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
         } else {
             view.showMessage(exception!!.message as String)
             Timber.e(exception)
-            Timber.d("loaded $total")
         }
     }
 
     // load more
 
-    override fun loadMore(page: Int, totalItemsCount: Int) {
-        pageStart = page
-        pageLimit = totalItemsCount
+    override fun loadMore(totalItemsCount: Int) {
+        start = if (totalItemsCount < 6) 1 else totalItemsCount
         refreshTask = AbstractTask()
         refreshTask.setOnRefreshListener(this)
         refreshTask.execute()
     }
 
     override fun onDoInBackgroundRefresh() {
-        val allMessages = repository.dbRepo.getMessagesBySender(senderId, pageStart, pageLimit).map {
+        messages = repository.dbRepo.getMessagesBySender(senderId, start, 2).map {
             getMappedMessage(if (it.content == null) {
                 repository.syncRepo.syncMessageById(it.realId)
                 repository.dbRepo.getMessageById(it.realId)
             } else it)
         }
-
-        total += allMessages.size
-
-        messages = allMessages
     }
 
     override fun onCanceledRefreshAsync() {
@@ -107,8 +92,6 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     override fun onEndRefreshAsync(success: Boolean, exception: Exception?) {
         if (success) {
             view.addToEnd(messages)
-            view.setTotalMessages(total)
-            total -= 1
         } else {
             view.showMessage(exception!!.message as String)
             Timber.e(exception)

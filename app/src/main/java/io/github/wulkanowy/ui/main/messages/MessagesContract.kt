@@ -19,6 +19,6 @@ interface MessagesContract {
 
         fun attachView(view: @NotNull View, senderId: Int, senderName: String)
 
-        fun loadMore(page: Int, totalItemsCount: Int)
+        fun loadMore(totalItemsCount: Int)
     }
 }
