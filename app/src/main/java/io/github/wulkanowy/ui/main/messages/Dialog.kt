@@ -7,7 +7,7 @@ data class Dialog(
         private val dialogPhoto: String?,
         private val dialogName: String?,
         private val users: ArrayList<User>,
-        private var lastMessage: Message,
+        private var lastMessage: Message?,
         private val unreadCount: Int
 ) : IDialog<Message> {
 

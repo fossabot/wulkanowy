@@ -56,12 +56,14 @@ class DialogsPresenter @Inject constructor(repo: RepositoryContract) : BasePrese
     // loading
 
     override fun onDoInBackgroundLoading() {
-        dialogs = repository.dbRepo.messages.map {
-            val users = arrayListOf<User>()
-            users.add(User(it.senderID.toString(), it.sender, it.sender))
-            val messages = Message(it.realId.toString(), it.content ?: it.subject, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), users[0])
-
-            Dialog(it.realId.toString(), it.sender ?: "J A", it.sender ?: "JA", users, messages, 1)
+        val messagesList = repository.dbRepo.messages
+        messagesList.sortByDescending { it.date }
+        dialogs = messagesList.groupBy { it.senderID }.map {
+            val messages = it.value.map {
+                val user = User(it.senderID.toString(), it.sender, it.sender)
+                Message(it.realId.toString(), it.content ?: it.subject, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), user)
+            }
+            Dialog(it.key.toString(), it.value.first().sender ?: "T Y", it.value.first().sender ?: "JA", arrayListOf(messages.first().user), messages.first(), 0)
         }
     }
 
