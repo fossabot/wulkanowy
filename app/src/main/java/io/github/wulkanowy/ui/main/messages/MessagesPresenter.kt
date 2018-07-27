@@ -45,9 +45,10 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
             if (it.content == null) {
                 repository.syncRepo.syncMessagesBySender(senderId)
             }
+            val subject = if (it.subject.isNotBlank()) "Temat: " + it.subject + "\n\n" else ""
             Message(
                     it.realId.toString(),
-                    "Temat: " + it.subject + "\n\n" + it.content.trim(),
+                    subject + it.content.trim(),
                     getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")),
                     User(it.senderID.toString(), it.sender, it.sender)
             )
