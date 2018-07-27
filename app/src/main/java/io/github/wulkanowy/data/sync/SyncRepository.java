@@ -121,8 +121,8 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncMessagesBySender(int senderId) {
-        messagesSync.syncMessagesBySender(senderId);
+    public void syncMessageById(int id) {
+        messagesSync.syncMessageById(id);
     }
 
     @Override

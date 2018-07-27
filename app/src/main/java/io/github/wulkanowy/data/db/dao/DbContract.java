@@ -18,7 +18,9 @@ public interface DbContract {
 
     List<Grade> getNewGrades(int semesterName);
 
-    Message getMessage();
+    Message getMessageById(int id);
+
+    List<Message> getMessagesBySender(int senderId, int start, int limit);
 
     List<Message> getMessagesBySender(int senderId);
 

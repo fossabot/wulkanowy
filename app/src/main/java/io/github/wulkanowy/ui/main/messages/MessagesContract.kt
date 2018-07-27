@@ -11,6 +11,8 @@ interface MessagesContract {
         fun addToEnd(message: List<IMessage>)
 
         fun setActivityTitle(senderName: String)
+
+        fun setTotalMessages(total: Int)
     }
 
     interface Presenter : BaseContract.Presenter<View> {

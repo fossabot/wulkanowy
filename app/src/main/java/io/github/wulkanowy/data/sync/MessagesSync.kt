@@ -19,16 +19,16 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
         syncMessages(vulcan.messages.sent, Messages.SENT_FOLDER)
     }
 
-    fun syncMessagesBySender(senderId: Int) {
-        daoSession.messageDao.queryBuilder().where(
-                MessageDao.Properties.SenderID.eq(senderId),
+    fun syncMessageById(id: Int) {
+        val message = daoSession.messageDao.queryBuilder().where(
+                MessageDao.Properties.RealId.eq(id),
                 MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
-        ).orderDesc(MessageDao.Properties.Date).list().map {
-            val apiMessage = vulcan.messages.getMessage(it.messageID, it.folderId)
-            it.content = apiMessage.content
-            it.realId = apiMessage.id
-            it.update()
-        }
+        ).uniqueOrThrow()
+
+        val apiMessage = vulcan.messages.getMessage(message.messageID, message.folderId)
+        message.content = apiMessage.content
+        message.realId = apiMessage.id
+        message.update()
     }
 
     fun syncAllFirstMessagesFromSenders() {

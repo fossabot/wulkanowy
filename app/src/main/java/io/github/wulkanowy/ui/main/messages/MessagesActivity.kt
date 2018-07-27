@@ -10,6 +10,7 @@ import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdapter.OnLoadMoreListener {
@@ -23,6 +24,8 @@ class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdap
     lateinit var presenter: MessagesContract.Presenter
 
     private lateinit var messagesAdapter: MessagesListAdapter<IMessage>
+
+    private var messagesTotal = 0
 
     @BindView(R.id.messages_list)
     lateinit var messagesList: MessagesList
@@ -41,6 +44,7 @@ class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdap
         presenter.attachView(this, senderId, senderName)
 
         messagesAdapter = MessagesListAdapter("0", imageLoader)
+        messagesAdapter.setLoadMoreListener(this)
         messagesList.setAdapter(messagesAdapter)
     }
 
@@ -48,11 +52,19 @@ class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdap
         title = senderName
     }
 
+    override fun setTotalMessages(total: Int) {
+        messagesTotal = total
+        Timber.d("loaded $total")
+    }
+
     override fun addToEnd(message: List<IMessage>) {
         messagesAdapter.addToEnd(message, false)
     }
 
     override fun onLoadMore(page: Int, totalItemsCount: Int) {
-        presenter.loadMore(page, totalItemsCount)
+        Timber.i("onLoadMore: $page $totalItemsCount $messagesTotal")
+        if (totalItemsCount < messagesTotal) {
+            presenter.loadMore(page, totalItemsCount)
+        }
     }
 }

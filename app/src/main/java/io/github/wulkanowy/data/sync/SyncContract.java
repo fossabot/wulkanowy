@@ -43,5 +43,5 @@ public interface SyncContract {
 
     void syncAll() throws VulcanException, IOException, ParseException;
 
-    void syncMessagesBySender(int senderId);
+    void syncMessageById(int id);
 }

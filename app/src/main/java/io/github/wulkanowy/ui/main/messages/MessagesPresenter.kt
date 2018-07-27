@@ -11,15 +11,24 @@ import org.jetbrains.annotations.NotNull
 import timber.log.Timber
 import java.lang.Exception
 import javax.inject.Inject
+import io.github.wulkanowy.data.db.dao.entities.Message as MessageEntity
 
 class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePresenter<MessagesContract.View>(repo),
-        MessagesContract.Presenter, AsyncListeners.OnFirstLoadingListener {
+        MessagesContract.Presenter, AsyncListeners.OnFirstLoadingListener, AsyncListeners.OnRefreshListener {
 
     private lateinit var loadingTask: AbstractTask
 
+    private lateinit var refreshTask: AbstractTask
+
     private var messages = listOf<IMessage>()
 
+    private var total = 0
+
     private var senderId = 0
+
+    private var pageStart = 0
+
+    private var pageLimit = 1
 
     override fun attachView(view: @NotNull MessagesContract.View, senderId: Int, senderName: String) {
         super.attachView(view)
@@ -30,9 +39,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
         loadMessages()
     }
 
-    override fun loadMore(page: Int, totalItemsCount: Int) {
-        view.showMessage("page: $page totalItemsCount: $totalItemsCount")
-    }
+    // first load
 
     private fun loadMessages() {
         loadingTask = AbstractTask()
@@ -41,18 +48,20 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundLoading() {
-        messages = repository.dbRepo.getMessagesBySender(senderId).map {
+        val allMessages = repository.dbRepo.getMessagesBySender(senderId).map {
             if (it.content == null) {
                 return@map null
             }
-            val subject = if (it.subject.isNotBlank()) "Temat: " + it.subject + "\n\n" else ""
-            Message(
-                    it.realId.toString(),
-                    subject + it.content.trim(),
-                    getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")),
-                    User(it.senderID.toString(), it.sender, it.sender)
-            )
-        }.filterNotNull()
+            getMappedMessage(it)
+        }
+
+        if (allMessages.filterNotNull().isEmpty()) { //
+            repository.syncRepo.syncAllFirstMessagesFromSenders()
+        }
+
+        total = allMessages.size
+
+        messages = allMessages.filterNotNull()
     }
 
     override fun onCanceledLoadingAsync() {
@@ -61,9 +70,58 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     override fun onEndLoadingAsync(success: Boolean, exception: Exception?) {
         if (success) {
             view.addToEnd(messages)
+            view.setTotalMessages(total)
+        } else {
+            view.showMessage(exception!!.message as String)
+            Timber.e(exception)
+            Timber.d("loaded $total")
+        }
+    }
+
+    // load more
+
+    override fun loadMore(page: Int, totalItemsCount: Int) {
+        pageStart = page
+        pageLimit = totalItemsCount
+        refreshTask = AbstractTask()
+        refreshTask.setOnRefreshListener(this)
+        refreshTask.execute()
+    }
+
+    override fun onDoInBackgroundRefresh() {
+        val allMessages = repository.dbRepo.getMessagesBySender(senderId, pageStart, pageLimit).map {
+            getMappedMessage(if (it.content == null) {
+                repository.syncRepo.syncMessageById(it.realId)
+                repository.dbRepo.getMessageById(it.realId)
+            } else it)
+        }
+
+        total += allMessages.size
+
+        messages = allMessages
+    }
+
+    override fun onCanceledRefreshAsync() {
+    }
+
+    override fun onEndRefreshAsync(success: Boolean, exception: Exception?) {
+        if (success) {
+            view.addToEnd(messages)
+            view.setTotalMessages(total)
+            total -= 1
         } else {
             view.showMessage(exception!!.message as String)
             Timber.e(exception)
         }
+    }
+
+    private fun getMappedMessage(e: MessageEntity): Message {
+        val subject = if (e.subject.isNotBlank()) "Temat: " + e.subject + "\n\n" else ""
+        return Message(
+                e.realId.toString(),
+                subject + e.content.trim(),
+                getDate(getDateAsTick(e.date, "yyyy-MM-dd HH:mm:ss")),
+                User(e.senderID.toString(), e.sender, e.sender)
+        )
     }
 }
