@@ -42,7 +42,9 @@
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/WulkanowyTheme.DarkActionBar" />
-        <activity android:name=".ui.main.messages.MessagesActivity" />
+        <activity
+            android:name=".ui.main.messages.MessagesActivity"
+            android:theme="@style/WulkanowyTheme.DarkActionBar" />
 
         <service
             android:name=".services.jobs.SyncJob"

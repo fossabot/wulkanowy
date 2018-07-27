@@ -105,6 +105,8 @@ class DialogsFragment : BaseFragment(), DialogsContract.View, DialogsListAdapter
 
     override fun onDialogClick(dialog: Dialog?) {
         context!!.startActivity(Intent(context, MessagesActivity::class.java)
-                .putExtra(MessagesActivity.SENDER_ID_KEY, dialog!!.users[0].id.toInt()))
+                .putExtra(MessagesActivity.SENDER_ID_KEY, dialog!!.users[0].id.toInt())
+                .putExtra(MessagesActivity.SENDER_NAME_KEY, dialog.dialogName)
+        )
     }
 }

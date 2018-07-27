@@ -17,15 +17,21 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     private lateinit var loadingTask: AbstractTask
 
-    private lateinit var message: IMessage
+    private var messages = listOf<IMessage>()
 
     private var senderId = 0
 
-    override fun attachView(view: @NotNull MessagesContract.View, senderId: Int) {
+    override fun attachView(view: @NotNull MessagesContract.View, senderId: Int, senderName: String) {
         super.attachView(view)
         this.senderId = senderId
 
+        view.setActivityTitle(senderName)
+
         loadMessages()
+    }
+
+    override fun loadMore(page: Int, totalItemsCount: Int) {
+        view.showMessage("page: $page totalItemsCount: $totalItemsCount")
     }
 
     private fun loadMessages() {
@@ -35,17 +41,15 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundLoading() {
-        repository.syncRepo.syncMessageBySender(senderId)
-        val mes = repository.dbRepo.getMessagesBySender(senderId)[0]
-
-        val user = User(mes.senderID.toString(), mes.sender, mes.sender)
-
-        message = Message(
-                mes.realId.toString(),
-                mes.content ?: "NPE",
-                getDate(getDateAsTick(mes.date, "yyyy-MM-dd HH:mm:ss")),
-                user
-        )
+        repository.syncRepo.syncMessagesBySender(senderId)
+        messages = repository.dbRepo.getMessagesBySender(senderId).map {
+            Message(
+                    it.realId.toString(),
+                    "Temat: " + it.subject + "\n\n" + it.content.trim(),
+                    getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")),
+                    User(it.senderID.toString(), it.sender, it.sender)
+            )
+        }
     }
 
     override fun onCanceledLoadingAsync() {
@@ -53,7 +57,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     override fun onEndLoadingAsync(success: Boolean, exception: Exception?) {
         if (success) {
-            view.addToStart(message)
+            view.addToEnd(messages)
         } else {
             view.showMessage(exception!!.message as String)
             Timber.e(exception)

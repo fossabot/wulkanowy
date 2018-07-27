@@ -8,11 +8,15 @@ interface MessagesContract {
 
     interface View : BaseContract.View {
 
-        fun addToStart(message: IMessage)
+        fun addToEnd(message: List<IMessage>)
+
+        fun setActivityTitle(senderName: String)
     }
 
     interface Presenter : BaseContract.Presenter<View> {
 
-        fun attachView(view: @NotNull View, senderId: Int)
+        fun attachView(view: @NotNull View, senderId: Int, senderName: String)
+
+        fun loadMore(page: Int, totalItemsCount: Int)
     }
 }

@@ -7,7 +7,7 @@ data class Message(
 
         private val id: String,
 
-        private val text: String,
+        private val text: String?,
 
         private val createdAt: Date,
 

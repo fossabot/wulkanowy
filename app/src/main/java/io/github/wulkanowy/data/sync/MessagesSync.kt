@@ -48,15 +48,17 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
         dbMessage.update()
     }
 
-    fun syncMessageBySender(senderId: Int) {
-        val dbMessage = daoSession.messageDao.queryBuilder().where(
+    fun syncMessagesBySender(senderId: Int) {
+        val dbMessages = daoSession.messageDao.queryBuilder().where(
                 MessageDao.Properties.SenderID.eq(senderId),
                 MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
-        ).orderDesc(MessageDao.Properties.Date).limit(1).unique()
+        ).orderDesc(MessageDao.Properties.Date).list()
 
-        val apiMessage = vulcan.messages.getMessage(dbMessage.messageID, Messages.RECEIVED_FOLDER)
-        dbMessage.content = apiMessage.content
-        dbMessage.realId = apiMessage.id
-        dbMessage.update()
+        dbMessages.map {
+            val apiMessage = vulcan.messages.getMessage(it.messageID, it.folderId)
+            it.content = apiMessage.content
+            it.realId = apiMessage.id
+            it.update()
+        }
     }
 }
