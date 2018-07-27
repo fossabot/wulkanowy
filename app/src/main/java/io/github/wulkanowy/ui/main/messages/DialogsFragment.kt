@@ -33,8 +33,8 @@ class DialogsFragment : BaseFragment(), DialogsContract.View, DialogsListAdapter
     lateinit var refreshLayout: SwipeRefreshLayout
 
     private val imageLoader = ImageLoader { imageView, name ->
-        val letters = name.split(" ").map { it.substring(0, 1) }
-        imageView.setImageDrawable(TextDrawable.builder().buildRect(letters[0] + letters[1], Color.DKGRAY))
+        val letters = name?.split(" ")?.map { it.substring(0, 1) }
+        imageView.setImageDrawable(TextDrawable.builder().buildRect(letters?.getOrElse(0) {"J"} + letters?.getOrElse(1) {"A"}, Color.DKGRAY))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

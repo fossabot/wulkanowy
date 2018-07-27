@@ -61,7 +61,7 @@ class DialogsPresenter @Inject constructor(repo: RepositoryContract) : BasePrese
             users.add(User(it.senderID.toString(), it.sender, it.sender))
             val messages = Message(it.realId.toString(), it.content ?: it.subject, getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")), users[0])
 
-            Dialog(it.realId.toString(), it.sender ?: "", it.sender ?: "", users, messages, 1)
+            Dialog(it.realId.toString(), it.sender ?: "J A", it.sender ?: "JA", users, messages, 1)
         }
     }
 
