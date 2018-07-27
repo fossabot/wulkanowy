@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.VulcanException;
-import io.github.wulkanowy.api.messages.Messages;
 import io.github.wulkanowy.data.db.dao.DbContract;
 import io.github.wulkanowy.utils.security.ScramblerException;
 
@@ -127,6 +126,11 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
+    public void syncAllFirstMessagesFromSenders() {
+        messagesSync.syncAllFirstMessagesFromSenders();
+    }
+
+    @Override
     public void syncAll() throws VulcanException, IOException {
         syncSubjects();
         syncGrades();
@@ -134,5 +138,6 @@ public class SyncRepository implements SyncContract {
         syncTimetable();
         syncExams();
         syncMessages();
+        syncAllFirstMessagesFromSenders();
     }
 }

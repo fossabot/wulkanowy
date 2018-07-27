@@ -43,7 +43,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     override fun onDoInBackgroundLoading() {
         messages = repository.dbRepo.getMessagesBySender(senderId).map {
             if (it.content == null) {
-                repository.syncRepo.syncMessagesBySender(senderId)
+                return@map null
             }
             val subject = if (it.subject.isNotBlank()) "Temat: " + it.subject + "\n\n" else ""
             Message(
@@ -52,7 +52,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
                     getDate(getDateAsTick(it.date, "yyyy-MM-dd HH:mm:ss")),
                     User(it.senderID.toString(), it.sender, it.sender)
             )
-        }
+        }.filterNotNull()
     }
 
     override fun onCanceledLoadingAsync() {

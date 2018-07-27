@@ -19,6 +19,33 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
         syncMessages(vulcan.messages.sent, Messages.SENT_FOLDER)
     }
 
+    fun syncMessagesBySender(senderId: Int) {
+        daoSession.messageDao.queryBuilder().where(
+                MessageDao.Properties.SenderID.eq(senderId),
+                MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
+        ).orderDesc(MessageDao.Properties.Date).list().map {
+            val apiMessage = vulcan.messages.getMessage(it.messageID, it.folderId)
+            it.content = apiMessage.content
+            it.realId = apiMessage.id
+            it.update()
+        }
+    }
+
+    fun syncAllFirstMessagesFromSenders() {
+        val senderList = daoSession.messageDao.queryBuilder()
+                .where(MessageDao.Properties.UserId.eq(sharedPref.currentUserId))
+                .list()
+        senderList.sortByDescending { it.date }
+
+        senderList.groupBy { it.senderID }.map {
+            val m = it.value.first()
+            val apiMessage = vulcan.messages.getMessage(m.messageID, m.folderId)
+            m.content = apiMessage.content
+            m.realId = apiMessage.id
+            m.update()
+        }
+    }
+
     private fun syncMessages(messages: List<ApiMessage>, folder: Int) {
         val messageList = messages.map {
             val fromDb = getMessageById(it.id)
@@ -40,19 +67,5 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
                 MessageDao.Properties.RealId.eq(id),
                 MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
         ).unique()
-    }
-
-    fun syncMessagesBySender(senderId: Int) {
-        val dbMessages = daoSession.messageDao.queryBuilder().where(
-                MessageDao.Properties.SenderID.eq(senderId),
-                MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
-        ).orderDesc(MessageDao.Properties.Date).list()
-
-        dbMessages.map {
-            val apiMessage = vulcan.messages.getMessage(it.messageID, it.folderId)
-            it.content = apiMessage.content
-            it.realId = apiMessage.id
-            it.update()
-        }
     }
 }
