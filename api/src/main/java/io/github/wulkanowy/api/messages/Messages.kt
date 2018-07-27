@@ -38,10 +38,10 @@ class Messages(private val client: Client) {
             return Gson().fromJson(res, MessagesContainer::class.java).data
         } catch (e: JsonParseException) {
             if (res.contains(ERROR_TITLE)) {
-                throw BadRequestException(ERROR_TITLE)
+                throw BadRequestException(ERROR_TITLE, e)
             }
 
-            throw NotLoggedInErrorException("You are probably not logged in")
+            throw NotLoggedInErrorException("You are probably not logged in", e)
         }
     }
 
@@ -54,10 +54,10 @@ class Messages(private val client: Client) {
             return Gson().fromJson(res, MessageContainer::class.java).data
         } catch (e: JsonParseException) {
             if (res.contains(ERROR_TITLE)) {
-                throw BadRequestException(ERROR_TITLE)
+                throw BadRequestException(ERROR_TITLE, e)
             }
 
-            throw NotLoggedInErrorException("You are probably not logged in. Force login")
+            throw NotLoggedInErrorException("You are probably not logged in. Force login", e)
         }
     }
 
