@@ -2,6 +2,9 @@ package io.github.wulkanowy.data.db.dao.entities;
 
 import org.greenrobot.greendao.test.AbstractDaoTestLongPk;
 
+import io.github.wulkanowy.data.db.dao.entities.AttendanceType;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceTypeDao;
+
 public class AttendanceTypeTest extends AbstractDaoTestLongPk<AttendanceTypeDao, AttendanceType> {
 
     public AttendanceTypeTest() {
@@ -12,7 +15,8 @@ public class AttendanceTypeTest extends AbstractDaoTestLongPk<AttendanceTypeDao,
     protected AttendanceType createEntity(Long key) {
         AttendanceType entity = new AttendanceType();
         entity.setId(key);
-        entity.setTotal(100);
+        entity.setSubjectId(1);
+        entity.setValue(1);
         return entity;
     }
 

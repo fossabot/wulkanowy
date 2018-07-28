@@ -35,87 +35,39 @@ class AttendanceStatisticsTest : StudentAndParentTestCase() {
         assertEquals("Brak opisu lekcji", full.getSubjectList()[22].name)
     }
 
-    @Test fun getTypesTotal() {
-        assertEquals(100.0, excellent.getTypesTable().total, 0.0)
-        assertEquals(80.94, full.getTypesTable().total, 0.0)
+    @Test fun getTypes() {
+        assertEquals(10, excellent.getEntries().size)
+        assertEquals(30, full.getEntries().size)
     }
 
     @Test fun getTypeName() {
-        val typeList1 = excellent.getTypesTable().attendanceTypeList
-        assertEquals("Obecność", typeList1[0].name)
-        assertEquals("Nieobecność nieusprawiedliwiona", typeList1[1].name)
-        assertEquals("Nieobecność usprawiedliwiona", typeList1[2].name)
-        assertEquals("Nieobecność z przyczyn szkolnych", typeList1[3].name)
+        assertEquals("Obecność", excellent.getEntries()[0].name)
 
-        val typeList2 = full.getTypesTable().attendanceTypeList
-        assertEquals("Spóźnienie nieusprawiedliwione", typeList2[4].name)
-        assertEquals("Spóźnienie usprawiedliwione", typeList2[5].name)
-        assertEquals("Zwolnienie", typeList2[6].name)
+        assertEquals("Spóźnienie nieusprawiedliwione", full.getEntries()[25].name)
+        assertEquals("Spóźnienie usprawiedliwione", full.getEntries()[27].name)
+        assertEquals("Zwolnienie", full.getEntries()[29].name)
     }
 
-    @Test fun getTypeTotal() {
-        val typeList1 = excellent.getTypesTable().attendanceTypeList
-        assertEquals(1211, typeList1[0].total)
-        assertEquals(0, typeList1[1].total)
-        assertEquals(0, typeList1[2].total)
-        assertEquals(0, typeList1[3].total)
-        assertEquals(0, typeList1[4].total)
-        assertEquals(0, typeList1[5].total)
-        assertEquals(0, typeList1[6].total)
-
-        val typeList2 = full.getTypesTable().attendanceTypeList
-        assertEquals(822, typeList2[0].total)
-        assertEquals(6, typeList2[1].total)
-        assertEquals(192, typeList2[2].total)
-        assertEquals(7, typeList2[3].total)
-        assertEquals(12, typeList2[4].total)
-        assertEquals(1, typeList2[5].total)
-        assertEquals(2, typeList2[6].total)
-    }
-
-    @Test fun getTypeList() {
-        val typesList1 = excellent.getTypesTable().attendanceTypeList
-        assertEquals(12, typesList1[0].monthList.size)
-        assertEquals(12, typesList1[5].monthList.size)
-
-        val typesList2 = full.getTypesTable().attendanceTypeList
-        assertEquals(12, typesList2[0].monthList.size)
-        assertEquals(12, typesList2[5].monthList.size)
-    }
-
-    @Test fun getMonthList() {
-        val typeList1 = excellent.getTypesTable().attendanceTypeList
-        assertEquals(12, typeList1[0].monthList.size)
-
-        val typeList2 = full.getTypesTable().attendanceTypeList
-        assertEquals(12, typeList2[0].monthList.size)
-    }
 
     @Test fun getMonthName() {
-        val monthsList1 = excellent.getTypesTable().attendanceTypeList[0].monthList
-        assertEquals("IX", monthsList1[0].name)
-        assertEquals("III", monthsList1[6].name)
-        assertEquals("VIII", monthsList1[11].name)
+        assertEquals("IX", excellent.getEntries()[0].month)
+        assertEquals("III", excellent.getEntries()[6].month)
 
-        val monthsList2 = full.getTypesTable().attendanceTypeList[0].monthList
-        assertEquals("XI", monthsList2[2].name)
-        assertEquals("II", monthsList2[5].name)
-        assertEquals("VI", monthsList2[9].name)
+        assertEquals("XI", full.getEntries()[2].month)
+        assertEquals("II", full.getEntries()[5].month)
+        assertEquals("VI", full.getEntries()[9].month)
     }
 
     @Test fun getMonthValue() {
-        val monthsList1 = excellent.getTypesTable().attendanceTypeList[0].monthList
-        assertEquals(142, monthsList1[0].value)
-        assertEquals(131, monthsList1[4].value)
-        assertEquals(139, monthsList1[7].value)
-        assertEquals(114, monthsList1[9].value)
-        assertEquals(0, monthsList1[11].value)
+        assertEquals(142, excellent.getEntries()[0].value)
+        assertEquals(131, excellent.getEntries()[4].value)
+        assertEquals(139, excellent.getEntries()[7].value)
+        assertEquals(114, excellent.getEntries()[9].value)
 
-        val typeList1 = full.getTypesTable().attendanceTypeList
-        assertEquals(135, typeList1[0].monthList[0].value)
-        assertEquals(7, typeList1[3].monthList[5].value)
-        assertEquals(1, typeList1[5].monthList[0].value)
-        assertEquals(27, typeList1[2].monthList[9].value)
-        assertEquals(0, typeList1[0].monthList[11].value)
+        assertEquals(135, full.getEntries()[0].value)
+        assertEquals(7, full.getEntries()[20].value)
+        assertEquals(1, full.getEntries()[29].value)
+        assertEquals(27, full.getEntries()[19].value)
+        assertEquals(59, full.getEntries()[9].value)
     }
 }

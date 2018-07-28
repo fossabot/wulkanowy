@@ -5,9 +5,6 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.ToMany;
-
-import java.util.List;
 
 @Entity(
         nameInDb = "AttendanceTypes",
@@ -18,17 +15,20 @@ public class AttendanceType {
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "statistics_id")
-    private Long statisticsId;
+    @Property(nameInDb = "diary_id")
+    private Long diaryId;
+
+    @Property(nameInDb = "subject_id")
+    private int subjectId;
 
     @Property(nameInDb = "name")
     private String name;
 
-    @Property(nameInDb = "total")
-    private int total;
+    @Property(nameInDb = "month")
+    private String month;
 
-    @ToMany(referencedJoinProperty = "typeId")
-    private List<AttendanceMonth> attendanceMonths;
+    @Property(nameInDb = "value")
+    private int value;
 
     /**
      * Used to resolve relations
@@ -42,12 +42,15 @@ public class AttendanceType {
     @Generated(hash = 1691779012)
     private transient AttendanceTypeDao myDao;
 
-    @Generated(hash = 335168635)
-    public AttendanceType(Long id, Long statisticsId, String name, int total) {
+    @Generated(hash = 272715584)
+    public AttendanceType(Long id, Long diaryId, int subjectId, String name,
+                          String month, int value) {
         this.id = id;
-        this.statisticsId = statisticsId;
+        this.diaryId = diaryId;
+        this.subjectId = subjectId;
         this.name = name;
-        this.total = total;
+        this.month = month;
+        this.value = value;
     }
 
     @Generated(hash = 95569988)
@@ -62,12 +65,20 @@ public class AttendanceType {
         this.id = id;
     }
 
-    public Long getStatisticsId() {
-        return this.statisticsId;
+    public Long getDiaryId() {
+        return this.diaryId;
     }
 
-    public void setStatisticsId(Long statisticsId) {
-        this.statisticsId = statisticsId;
+    public void setDiaryId(Long diaryId) {
+        this.diaryId = diaryId;
+    }
+
+    public int getSubjectId() {
+        return this.subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 
     public String getName() {
@@ -78,43 +89,20 @@ public class AttendanceType {
         this.name = name;
     }
 
-    public int getTotal() {
-        return this.total;
+    public String getMonth() {
+        return this.month;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setMonth(String month) {
+        this.month = month;
     }
 
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1879446797)
-    public List<AttendanceMonth> getAttendanceMonths() {
-        if (attendanceMonths == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            AttendanceMonthDao targetDao = daoSession.getAttendanceMonthDao();
-            List<AttendanceMonth> attendanceMonthsNew = targetDao
-                    ._queryAttendanceType_AttendanceMonths(id);
-            synchronized (this) {
-                if (attendanceMonths == null) {
-                    attendanceMonths = attendanceMonthsNew;
-                }
-            }
-        }
-        return attendanceMonths;
+    public int getValue() {
+        return this.value;
     }
 
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 1083365838)
-    public synchronized void resetAttendanceMonths() {
-        attendanceMonths = null;
+    public void setValue(int value) {
+        this.value = value;
     }
 
     /**

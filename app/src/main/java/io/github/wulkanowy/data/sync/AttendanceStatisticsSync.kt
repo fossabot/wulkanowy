@@ -20,31 +20,8 @@ class AttendanceStatisticsSync @Inject constructor(private val daoSession: DaoSe
     }
 
     fun syncStatistics(diaryId: Long, subjectId: Int = -1) {
-        deleteIfExist(diaryId, subjectId)
-
-        val statistics = vulcan.attendanceStatistics.getTypesTable(subjectId)
-
-        val statId = daoSession.attendanceStatisticsDao.insert(AttendanceStatistics(null, diaryId, subjectId, statistics.total))
-
-        statistics.attendanceTypeList.map {
-            val typeId = daoSession.attendanceTypeDao.insert(AttendanceType(null, statId, it.name, it.total))
-
-            daoSession.attendanceMonthDao.insertInTx(it.monthList.map {
-                AttendanceMonth(null, typeId, it.name, it.value)
-            })
-        }
-    }
-
-    private fun deleteIfExist(diaryId: Long, subjectId: Int) {
-        val stat = daoSession.attendanceStatisticsDao.queryBuilder().where(
-                AttendanceStatisticsDao.Properties.DiaryId.eq(diaryId),
-                AttendanceStatisticsDao.Properties.SubjectId.eq(subjectId)
-        ).unique() ?: return
-
-        stat.attendanceTypes?.map {
-            it.attendanceMonths.map(AttendanceMonth::delete)
-            it.delete()
-        }
-        stat.delete()
+        daoSession.attendanceTypeDao.insertInTx(vulcan.getAttendanceStatistics(subjectId).map {
+            AttendanceType(null, diaryId, subjectId, it.name, it.month, it.value)
+        })
     }
 }

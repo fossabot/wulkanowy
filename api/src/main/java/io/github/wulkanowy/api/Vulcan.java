@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import io.github.wulkanowy.api.attendance.Attendance;
+import io.github.wulkanowy.api.attendance.AttendanceType;
 import io.github.wulkanowy.api.attendance.AttendanceLesson;
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
@@ -93,6 +94,10 @@ public class Vulcan {
 
     public List<Subject> getAttendanceSubjects() throws VulcanException, IOException {
         return new AttendanceStatistics(getStudentAndParent()).getSubjectList();
+    }
+
+    public List<AttendanceType> getAttendanceStatistics(int subjectId) throws IOException, VulcanException {
+        return new AttendanceStatistics(getStudentAndParent()).getEntries(subjectId);
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {
