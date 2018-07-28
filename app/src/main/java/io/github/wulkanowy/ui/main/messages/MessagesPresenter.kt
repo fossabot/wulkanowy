@@ -78,10 +78,10 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundRefresh() {
-        messages = repository.dbRepo.getMessagesBySender(senderId, start, 2).map {
+        messages = repository.dbRepo.getMessagesBySender(senderId, start, 1).map {
             getMappedMessage(if (it.content == null) {
-                repository.syncRepo.syncMessageById(it.realId)
-                repository.dbRepo.getMessageById(it.realId)
+                repository.syncRepo.syncMessageById(it.messageID)
+                repository.dbRepo.getMessageById(it.messageID)
             } else it)
         }
     }

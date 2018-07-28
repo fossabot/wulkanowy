@@ -42,6 +42,7 @@ class Messages(private val client: Client) {
                 it.name.split("[").last().split("]").first().trim() == messageRecipients
             }
 
+            it.messageID = it.id
             it.userName = user.name
             it.userId = user.loginId
 

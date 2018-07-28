@@ -21,7 +21,7 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
 
     fun syncMessageById(id: Int) {
         val message = daoSession.messageDao.queryBuilder().where(
-                MessageDao.Properties.RealId.eq(id),
+                MessageDao.Properties.MessageID.eq(id),
                 MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
         ).uniqueOrThrow()
 
@@ -48,7 +48,7 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
 
     private fun syncMessages(messages: List<ApiMessage>, folder: Int) {
         val messageList = messages.map {
-            val fromDb = getMessageById(it.id)
+            val fromDb = getMessageById(it.messageID)
             if (fromDb != null) {
                 fromDb.unread = it.unread
                 return@map Message()
@@ -62,9 +62,9 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
         Timber.d("Messages synchronization complete (%s)", messageList.size)
     }
 
-    private fun getMessageById(id: Int): Message? {
+    private fun getMessageById(id: Int?): Message? {
         return daoSession.messageDao.queryBuilder().where(
-                MessageDao.Properties.RealId.eq(id),
+                MessageDao.Properties.MessageID.eq(id),
                 MessageDao.Properties.UserId.eq(sharedPref.currentUserId)
         ).unique()
     }

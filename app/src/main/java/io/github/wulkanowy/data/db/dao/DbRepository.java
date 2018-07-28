@@ -66,7 +66,7 @@ public class DbRepository implements DbContract {
     @Override
     public Message getMessageById(int id) {
         return daoSession.getMessageDao().queryBuilder().where(
-                MessageDao.Properties.RealId.eq(id),
+                MessageDao.Properties.MessageID.eq(id),
                 MessageDao.Properties.UserId.eq(sharedPref.getCurrentUserId())
         ).unique();
     }

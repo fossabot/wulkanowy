@@ -8,7 +8,7 @@ data class Message(
         val id: Int = 0,
 
         @SerializedName("IdWiadomosci")
-        val messageID: Int?,
+        var messageID: Int?,
 
         @SerializedName("IdNadawca")
         var userId: Int = 0,
