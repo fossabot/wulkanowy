@@ -54,7 +54,6 @@ class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdap
 
     override fun setTotalMessages(total: Int) {
         messagesTotal = total
-        Timber.d("Total messages: $total")
     }
 
     override fun addToEnd(message: List<IMessage>) {
@@ -62,9 +61,8 @@ class MessagesActivity : BaseActivity(), MessagesContract.View, MessagesListAdap
     }
 
     override fun onLoadMore(page: Int, totalItemsCount: Int) {
-        Timber.i("onLoadMore: page: $page itemsCount: $totalItemsCount total: $messagesTotal")
-        if (totalItemsCount <= messagesTotal) {
-            presenter.loadMore(totalItemsCount)
+        if (page <= messagesTotal) {
+            presenter.loadMore(page)
         }
     }
 }

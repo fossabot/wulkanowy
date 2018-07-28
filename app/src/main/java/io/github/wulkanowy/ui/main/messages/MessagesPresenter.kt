@@ -27,7 +27,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     private var senderId = 0
 
-    private var start = 0
+    private var startFrom = 0
 
     override fun attachView(view: @NotNull MessagesContract.View, senderId: Int, senderName: String) {
         super.attachView(view)
@@ -71,15 +71,15 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
 
     // load more
 
-    override fun loadMore(totalItemsCount: Int) {
-        start = if (totalItemsCount < 6) 1 else totalItemsCount
+    override fun loadMore(start: Int) {
+        startFrom = start
         refreshTask = AbstractTask()
         refreshTask.setOnRefreshListener(this)
         refreshTask.execute()
     }
 
     override fun onDoInBackgroundRefresh() {
-        messages = repository.dbRepo.getMessagesBySender(senderId, start, 3).map {
+        messages = repository.dbRepo.getMessagesBySender(senderId, startFrom, 2).map {
             getMappedMessage(if (it.content == null) {
                 repository.syncRepo.syncMessageById(it.messageID)
                 repository.dbRepo.getMessageById(it.messageID)

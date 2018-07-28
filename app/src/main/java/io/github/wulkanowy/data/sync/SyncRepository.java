@@ -118,7 +118,6 @@ public class SyncRepository implements SyncContract {
     @Override
     public void syncMessages() {
         messagesSync.syncAllMessagesHeaders();
-        messagesSync.syncAllFirstMessagesFromSenders();
     }
 
     @Override
