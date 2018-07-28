@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.messages
 import com.stfalcon.chatkit.commons.models.IMessage
 import io.github.wulkanowy.api.getDate
 import io.github.wulkanowy.api.getDateAsTick
+import io.github.wulkanowy.api.messages.Messages
 import io.github.wulkanowy.data.RepositoryContract
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.async.AbstractTask
@@ -78,7 +79,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     override fun onDoInBackgroundRefresh() {
-        messages = repository.dbRepo.getMessagesBySender(senderId, start, 1).map {
+        messages = repository.dbRepo.getMessagesBySender(senderId, start, 3).map {
             getMappedMessage(if (it.content == null) {
                 repository.syncRepo.syncMessageById(it.messageID)
                 repository.dbRepo.getMessageById(it.messageID)
@@ -104,7 +105,7 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
                 e.realId.toString(),
                 subject + e.content.trim(),
                 getDate(getDateAsTick(e.date, "yyyy-MM-dd HH:mm:ss")),
-                User(e.senderID.toString(), e.sender, e.sender)
+                User(if (e.folderId != Messages.SENT_FOLDER) e.senderID.toString() else "0", e.sender, e.sender)
         )
     }
 }
