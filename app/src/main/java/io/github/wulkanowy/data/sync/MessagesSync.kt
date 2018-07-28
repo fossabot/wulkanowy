@@ -55,7 +55,7 @@ class MessagesSync @Inject constructor(private val daoSession: DaoSession, priva
             }
 
             Message(null, sharedPref.currentUserId, it.id, it.messageID ?: it.id,
-                    it.senderID, it.sender, it.unread, it.date, it.content, it.subject, folder)
+                    it.userId, it.userName, it.unread, it.date, it.content, it.subject, folder)
         }.filter { it.subject != null }
 
         daoSession.messageDao.insertInTx(messageList)

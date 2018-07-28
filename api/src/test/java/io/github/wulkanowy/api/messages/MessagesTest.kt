@@ -26,7 +26,7 @@ class MessagesTest {
         assertEquals(true, messageList[1].unread)
         assertEquals("2016-03-15 09:00:00", messageList[0].date)
         assertEquals(null, messageList[0].content)
-        assertEquals("Kowalski Jan", messageList[0].sender)
+        assertEquals("Kowalski Jan", messageList[0].userName)
         assertEquals(12347, messageList[2].id)
     }
 

@@ -4,11 +4,13 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
 
 @Entity(
         nameInDb = "Messages",
-        active = true
+        active = true,
+        indexes = {@Index(value = "realId,userId", unique = true)}
 )
 public class Message {
 
@@ -27,7 +29,7 @@ public class Message {
     @Property(nameInDb = "sender_id")
     private int senderID;
 
-    @Property(nameInDb = "sender")
+    @Property(nameInDb = "userName")
     private String sender;
 
     @Property(nameInDb = "unread")

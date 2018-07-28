@@ -11,7 +11,13 @@ data class Message(
         val messageID: Int?,
 
         @SerializedName("IdNadawca")
-        val senderID: Int = 0,
+        var userId: Int = 0,
+
+        @SerializedName("NadawcaNazwa")
+        var userName: String,
+
+        @SerializedName("Adresaci")
+        val recipients: String,
 
         @SerializedName("Nieprzeczytana")
         val unread: Boolean = false,
@@ -23,8 +29,5 @@ data class Message(
         val content: String?,
 
         @SerializedName("Temat")
-        val subject: String,
-
-        @SerializedName("NadawcaNazwa")
-        val sender: String
+        val subject: String
 )
