@@ -1,6 +1,6 @@
 package io.github.wulkanowy.api.attendance
 
-import java.util.ArrayList
+import java.util.*
 
 data class SubjectStatistics(
 

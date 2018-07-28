@@ -14,6 +14,7 @@ import io.github.wulkanowy.api.exams.ExamEntry;
 import io.github.wulkanowy.api.exams.Exams;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.generic.School;
+import io.github.wulkanowy.api.generic.Subject;
 import io.github.wulkanowy.api.grades.GradeKt;
 import io.github.wulkanowy.api.grades.Grades;
 import io.github.wulkanowy.api.grades.GradesList;
@@ -88,6 +89,10 @@ public class Vulcan {
     @Deprecated
     public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
         return new AttendanceTable(getStudentAndParent());
+    }
+
+    public List<Subject> getAttendanceSubjects() throws VulcanException, IOException {
+        return new AttendanceStatistics(getStudentAndParent()).getSubjectList();
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {

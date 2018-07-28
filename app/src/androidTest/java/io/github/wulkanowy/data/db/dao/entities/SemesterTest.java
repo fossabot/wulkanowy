@@ -2,9 +2,6 @@ package io.github.wulkanowy.data.db.dao.entities;
 
 import org.greenrobot.greendao.test.AbstractDaoTestLongPk;
 
-import io.github.wulkanowy.data.db.dao.entities.Semester;
-import io.github.wulkanowy.data.db.dao.entities.SemesterDao;
-
 public class SemesterTest extends AbstractDaoTestLongPk<SemesterDao, Semester> {
 
     public SemesterTest() {

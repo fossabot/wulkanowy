@@ -1,11 +1,8 @@
 package io.github.wulkanowy.utils
 
+import org.junit.Assert.*
 import org.junit.Test
 import org.threeten.bp.LocalDate
-
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 
 class TimeUtilsTest {
 

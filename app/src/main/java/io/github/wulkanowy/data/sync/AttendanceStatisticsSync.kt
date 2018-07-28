@@ -14,7 +14,7 @@ class AttendanceStatisticsSync @Inject constructor(private val daoSession: DaoSe
             return
         }
 
-        daoSession.attendanceSubjectDao.insertInTx(vulcan.attendanceStatistics.subjectList.map {
+        daoSession.attendanceSubjectDao.insertInTx(vulcan.attendanceSubjects.map {
             AttendanceSubject(null, diaryId, it.id, it.name)
         })
     }

@@ -2,9 +2,8 @@ package io.github.wulkanowy.api.grades
 
 import io.github.wulkanowy.api.StudentAndParentTestCase
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class GradesTest : StudentAndParentTestCase() {
 
