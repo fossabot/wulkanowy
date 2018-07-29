@@ -2,8 +2,11 @@ package io.github.wulkanowy.ui.main.attendance;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import io.github.wulkanowy.ui.base.BaseContract;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.ui.main.grades.GradesSummarySubItem;
 
 public interface AttendanceContract {
 
@@ -12,6 +15,8 @@ public interface AttendanceContract {
         void setActivityTitle();
 
         void scrollViewPagerToPosition(int position);
+
+        void updateSummaryAdapterList(List<AttendanceSummarySubItem> summarySubItems);
 
         void setTabDataToAdapter(String date);
 

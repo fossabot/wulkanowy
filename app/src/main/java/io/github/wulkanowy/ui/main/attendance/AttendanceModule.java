@@ -6,6 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.di.scopes.PerChildFragment;
 import io.github.wulkanowy.di.scopes.PerFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
@@ -29,4 +30,9 @@ public abstract class AttendanceModule {
     @PerChildFragment
     @ContributesAndroidInjector(modules = AttendanceTabModule.class)
     abstract AttendanceTabFragment bindAttendanceTabFragment();
+
+    @Provides
+    static FlexibleAdapter<AttendanceSummarySubItem> provideAttendanceSummaryAdapter() {
+        return new FlexibleAdapter<>(null);
+    }
 }

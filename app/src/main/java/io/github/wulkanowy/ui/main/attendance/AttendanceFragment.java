@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,15 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 import io.github.wulkanowy.ui.main.attendance.tab.AttendanceTabFragment;
+import io.github.wulkanowy.ui.main.grades.GradesSummarySubItem;
 
 public class AttendanceFragment extends BaseFragment implements AttendanceContract.View {
 
@@ -41,6 +47,12 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @Inject
     @Named("Attendance")
     BasePagerAdapter pagerAdapter;
+
+    @Inject
+    FlexibleAdapter<AttendanceSummarySubItem> summaryAdapter;
+
+    @BindView(R.id.attendance_fragment_summary_recycler)
+    RecyclerView summaryRecyclerView;
 
     @Inject
     AttendanceContract.Presenter presenter;
@@ -67,9 +79,19 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         summary.setVisibility(View.INVISIBLE);
         details.setVisibility(View.VISIBLE);
+
+        summaryAdapter.setDisplayHeadersAtStartUp(true);
+        summaryRecyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(view.getContext()));
+        summaryRecyclerView.setAdapter(summaryAdapter);
+        summaryRecyclerView.setNestedScrollingEnabled(false);
+    }
+
+    @Override
+    public void updateSummaryAdapterList(List<AttendanceSummarySubItem> summarySubItems) {
+        summaryAdapter.updateDataSet(summarySubItems);
     }
 
     @Override

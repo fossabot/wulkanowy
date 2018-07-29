@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db.dao;
 import java.util.List;
 
 import io.github.wulkanowy.data.db.dao.entities.AttendanceSubject;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceType;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Symbol;
@@ -37,4 +38,6 @@ public interface DbContract {
     void recreateDatabase();
 
     List<AttendanceSubject> getAttendanceSubjects();
+
+    List<AttendanceType> getAttendanceStatistics(int subjectId);
 }

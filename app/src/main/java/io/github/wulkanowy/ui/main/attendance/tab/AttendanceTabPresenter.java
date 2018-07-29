@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
-import io.github.wulkanowy.data.db.dao.entities.AttendanceSubject;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.ui.base.BasePresenter;
@@ -173,17 +172,6 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
     private void syncData() throws Exception {
         getRepository().getSyncRepo().syncAttendance(0, date);
-
-        // TODO
-        syncStatisticsData();
-    }
-
-    private void syncStatisticsData() {
-        getRepository().getSyncRepo().syncAttendanceStatisticSubjects();
-        List<AttendanceSubject> subjects = getRepository().getDbRepo().getAttendanceSubjects();
-        for (AttendanceSubject item : subjects) {
-            getRepository().getSyncRepo().syncAttendanceStatistics(item.getRealId());
-        }
     }
 
     private void cancelAsyncTasks() {
