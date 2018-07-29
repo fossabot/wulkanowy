@@ -2,8 +2,10 @@ package io.github.wulkanowy.utils
 
 import org.threeten.bp.DayOfWeek.*
 import org.threeten.bp.LocalDate
+import org.threeten.bp.Month
 import org.threeten.bp.Year
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.*
 
@@ -66,6 +68,27 @@ fun getTodayOrNextDay(next: Boolean, date: LocalDate): String? {
 
 fun isDateInWeek(firstWeekDay: LocalDate, date: LocalDate): Boolean {
     return date.isAfter(firstWeekDay.minusDays(1)) && date.isBefore(firstWeekDay.plusDays(5))
+}
+
+fun getMonthNameByNumber(integerMonth: Int): String? {
+    val name = Month.of(integerMonth).getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
+
+    // workaround for polish https://github.com/ThreeTen/threetenbp/issues/55
+    return when(name) {
+        "stycznia" -> "Styczeń"
+        "lutego" -> "Luty"
+        "marca" -> "Marzec"
+        "kwietnia" -> "Kwiecień"
+        "maja" -> "Maj"
+        "czerwca" -> "Czerwiec"
+        "lipca" -> "Lipiec"
+        "sierpnia" -> "Sierpień"
+        "września" -> "Wrzesień"
+        "października" -> "Październik"
+        "listopada" -> "Listopad"
+        "grudnia" -> "Grudzień"
+        else -> name
+    }
 }
 
 /**

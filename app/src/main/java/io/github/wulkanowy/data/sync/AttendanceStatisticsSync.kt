@@ -2,7 +2,7 @@ package io.github.wulkanowy.data.sync
 
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.data.db.dao.entities.*
-
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,8 +20,20 @@ class AttendanceStatisticsSync @Inject constructor(private val daoSession: DaoSe
     }
 
     fun syncStatistics(diaryId: Long, subjectId: Int = -1) {
-        daoSession.attendanceTypeDao.insertInTx(vulcan.getAttendanceStatistics(subjectId).map {
+        clearStatistics(diaryId, subjectId)
+        val typesList = vulcan.getAttendanceStatistics(subjectId).map {
             AttendanceType(null, diaryId, subjectId, it.name, it.month, it.value)
-        })
+        }
+
+        daoSession.attendanceTypeDao.insertInTx(typesList)
+        Timber.d("Attendance statistics synchronization complete (%s)", typesList.size)
+    }
+
+    private fun clearStatistics(diaryId: Long, subjectId: Int) {
+        daoSession.attendanceTypeDao.queryBuilder().where(
+                AttendanceTypeDao.Properties.DiaryId.eq(diaryId),
+                AttendanceTypeDao.Properties.SubjectId.eq(subjectId)
+        ).buildDelete().executeDeleteWithoutDetachingEntities()
+        daoSession.clear()
     }
 }

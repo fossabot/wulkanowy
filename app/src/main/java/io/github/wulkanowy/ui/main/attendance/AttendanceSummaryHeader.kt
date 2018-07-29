@@ -9,27 +9,27 @@ import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.dao.entities.AttendanceSubject
+import io.github.wulkanowy.utils.getMonthNameByNumber
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
 
-class AttendanceSummaryHeader(private val name: String) : AbstractHeaderItem<AttendanceSummaryHeader.HeaderViewHolder>() {
+class AttendanceSummaryHeader(private val month: Int) : AbstractHeaderItem<AttendanceSummaryHeader.HeaderViewHolder>() {
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
 
-        if (o == null || javaClass != o.javaClass) return false
+        if (other == null || javaClass != other.javaClass) return false
 
-        val that = o as AttendanceSummaryHeader?
+        val that = other as AttendanceSummaryHeader?
 
         return EqualsBuilder()
-                .append(name, that!!.name)
+                .append(month, that!!.month)
                 .isEquals
     }
 
     override fun hashCode(): Int {
         return HashCodeBuilder(17, 37)
-                .append(name)
+                .append(month)
                 .toHashCode()
     }
 
@@ -42,7 +42,7 @@ class AttendanceSummaryHeader(private val name: String) : AbstractHeaderItem<Att
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: HeaderViewHolder, position: Int, payloads: List<Any>) {
-        holder.onBind(name)
+        holder.onBind(month)
     }
 
     class HeaderViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter) {
@@ -54,8 +54,8 @@ class AttendanceSummaryHeader(private val name: String) : AbstractHeaderItem<Att
             ButterKnife.bind(this, view)
         }
 
-        fun onBind(headerTitle: String) {
-            name.text = headerTitle
+        fun onBind(headerTitle: Int) {
+            name.text = getMonthNameByNumber(headerTitle)
         }
     }
 }

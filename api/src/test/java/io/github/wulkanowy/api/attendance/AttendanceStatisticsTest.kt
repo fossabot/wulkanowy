@@ -50,12 +50,12 @@ class AttendanceStatisticsTest : StudentAndParentTestCase() {
 
 
     @Test fun getMonthName() {
-        assertEquals("IX", excellent.getEntries()[0].month)
-        assertEquals("III", excellent.getEntries()[6].month)
+        assertEquals(9, excellent.getEntries()[0].month)
+        assertEquals(3, excellent.getEntries()[6].month)
 
-        assertEquals("XI", full.getEntries()[2].month)
-        assertEquals("II", full.getEntries()[5].month)
-        assertEquals("VI", full.getEntries()[9].month)
+        assertEquals(11, full.getEntries()[2].month)
+        assertEquals(2, full.getEntries()[5].month)
+        assertEquals(6, full.getEntries()[9].month)
     }
 
     @Test fun getMonthValue() {

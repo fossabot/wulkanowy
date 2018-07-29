@@ -26,7 +26,7 @@ public class SyncRepository implements SyncContract {
 
     private final ExamsSync examsSync;
 
-    private final DbContract database;;
+    private final DbContract database;
 
     @Inject
     SyncRepository(GradeSync gradeSync, SubjectSync subjectSync, AttendanceSync attendanceSync,
@@ -135,6 +135,8 @@ public class SyncRepository implements SyncContract {
         syncSubjects();
         syncGrades();
         syncAttendance();
+        syncAttendanceStatisticSubjects();
+        syncAttendanceStatistics();
         syncTimetable();
         syncExams();
     }

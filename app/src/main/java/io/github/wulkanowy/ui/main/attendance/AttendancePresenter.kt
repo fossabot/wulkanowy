@@ -63,6 +63,9 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
 
         val subjects = repository.dbRepo.attendanceSubjects
         val types = repository.dbRepo.getAttendanceStatistics(subjects[0].realId)
+
+        if (types.isEmpty()) { return }
+
         types.groupBy { it.month }.map {
             val summaryHeader = AttendanceSummaryHeader(it.key)
             it.value.mapTo(summarySubItems) {

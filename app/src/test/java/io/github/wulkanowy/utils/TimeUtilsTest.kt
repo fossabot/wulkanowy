@@ -3,6 +3,7 @@ package io.github.wulkanowy.utils
 import org.junit.Assert.*
 import org.junit.Test
 import org.threeten.bp.LocalDate
+import java.util.*
 
 class TimeUtilsTest {
 
@@ -80,6 +81,15 @@ class TimeUtilsTest {
                 LocalDate.of(2018, 5, 28),
                 LocalDate.of(2018, 5, 27)
         ))
+    }
+
+    @Test fun getMonthNameTest() {
+        Locale.setDefault(Locale("en"))
+        assertEquals("January", getMonthNameByNumber(1))
+        assertEquals("December", getMonthNameByNumber(12))
+        Locale.setDefault(Locale("pl"))
+        assertEquals("Styczeń", getMonthNameByNumber(1))
+        assertEquals("Grudzień", getMonthNameByNumber(12))
     }
 
     @Test fun isHolidaysInSchoolEndTest() {
