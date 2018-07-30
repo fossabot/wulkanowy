@@ -66,6 +66,8 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
 
         if (types.isEmpty()) { return }
 
+        types.sortByDescending { it.order }
+
         types.groupBy { it.month }.map {
             val summaryHeader = AttendanceSummaryHeader(it.key)
             it.value.mapTo(summarySubItems) {

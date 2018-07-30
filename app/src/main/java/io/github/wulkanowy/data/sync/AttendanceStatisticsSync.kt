@@ -22,7 +22,7 @@ class AttendanceStatisticsSync @Inject constructor(private val daoSession: DaoSe
     fun syncStatistics(diaryId: Long, subjectId: Int = -1) {
         clearStatistics(diaryId, subjectId)
         val typesList = vulcan.getAttendanceStatistics(subjectId).map {
-            AttendanceType(null, diaryId, subjectId, it.name, it.month, it.value)
+            AttendanceType(null, diaryId, subjectId, it.name, it.month, it.order, it.value)
         }
 
         daoSession.attendanceTypeDao.insertInTx(typesList)

@@ -6,5 +6,7 @@ data class AttendanceType(
 
         val month: Int,
 
+        val order: Int,
+
         val value: Int
 )

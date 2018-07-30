@@ -27,6 +27,9 @@ public class AttendanceType {
     @Property(nameInDb = "month")
     private int month;
 
+    @Property(nameInDb = "order")
+    private int order;
+
     @Property(nameInDb = "value")
     private int value;
 
@@ -42,14 +45,15 @@ public class AttendanceType {
     @Generated(hash = 1691779012)
     private transient AttendanceTypeDao myDao;
 
-    @Generated(hash = 2011980578)
+    @Generated(hash = 1321562462)
     public AttendanceType(Long id, Long diaryId, int subjectId, String name,
-                          int month, int value) {
+                          int month, int order, int value) {
         this.id = id;
         this.diaryId = diaryId;
         this.subjectId = subjectId;
         this.name = name;
         this.month = month;
+        this.order = order;
         this.value = value;
     }
 
@@ -95,6 +99,14 @@ public class AttendanceType {
 
     public void setMonth(int month) {
         this.month = month;
+    }
+
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public int getValue() {

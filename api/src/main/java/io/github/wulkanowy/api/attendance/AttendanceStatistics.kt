@@ -33,6 +33,7 @@ class AttendanceStatistics(private val snp: SnP) {
                 AttendanceType(
                         name = monthCells[0].text(),
                         month = romanToInt(headerCells[i].text()),
+                        order = i,
                         value = NumberUtils.toInt(item.text(), 0)
                 )
             }
