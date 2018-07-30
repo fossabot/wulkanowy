@@ -22,7 +22,8 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Day;
-import io.github.wulkanowy.utils.CommonUtils;
+
+import static io.github.wulkanowy.utils.CommonUtilsKt.getThemeAttrColor;
 
 public class TimetableHeader
         extends AbstractExpandableHeaderItem<TimetableHeader.HeaderViewHolder, TimetableSubItem> {
@@ -103,11 +104,11 @@ public class TimetableHeader
 
         private void setInactiveHeader(boolean inactive) {
             ((FrameLayout) getContentView()).setForeground(inactive ? null : getSelectableDrawable());
-            dayName.setTextColor(CommonUtils.getThemeAttrColor(context,
+            dayName.setTextColor(getThemeAttrColor(context,
                     inactive ? android.R.attr.textColorSecondary : android.R.attr.textColorPrimary));
 
             if (inactive) {
-                getContentView().setBackgroundColor(CommonUtils.getThemeAttrColor(context, R.attr.colorControlHighlight));
+                getContentView().setBackgroundColor(getThemeAttrColor(context, R.attr.colorControlHighlight));
             } else {
                 getContentView().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ic_border));
             }

@@ -18,6 +18,8 @@ public interface AttendanceContract {
 
         void updateSummaryAdapterList(List<AttendanceSummarySubItem> summarySubItems);
 
+        void setTotalAttendance(double total);
+
         void setTabDataToAdapter(String date);
 
         void setAdapterWithTabLayout();

@@ -12,8 +12,9 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.utils.getMonthNameByNumber
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
+import java.util.*
 
-class AttendanceSummaryHeader(private val month: Int) : AbstractHeaderItem<AttendanceSummaryHeader.HeaderViewHolder>() {
+class AttendanceSummaryHeader(private val month: Int, private val total: Double) : AbstractHeaderItem<AttendanceSummaryHeader.HeaderViewHolder>() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -24,6 +25,7 @@ class AttendanceSummaryHeader(private val month: Int) : AbstractHeaderItem<Atten
 
         return EqualsBuilder()
                 .append(month, that!!.month)
+                .append(total, that.total)
                 .isEquals
     }
 
@@ -42,7 +44,7 @@ class AttendanceSummaryHeader(private val month: Int) : AbstractHeaderItem<Atten
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: HeaderViewHolder, position: Int, payloads: List<Any>) {
-        holder.onBind(month)
+        holder.onBind(month, total)
     }
 
     class HeaderViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter) {
@@ -50,12 +52,16 @@ class AttendanceSummaryHeader(private val month: Int) : AbstractHeaderItem<Atten
         @BindView(R.id.attendance_summary_header_name)
         lateinit var name: TextView
 
+        @BindView(R.id.attendance_summary_header_total)
+        lateinit var total: TextView
+
         init {
             ButterKnife.bind(this, view)
         }
 
-        fun onBind(headerTitle: Int) {
+        fun onBind(headerTitle: Int, totalNumber: Double) {
             name.text = getMonthNameByNumber(headerTitle)
+            total.text = String.format(Locale.getDefault(), "%.2f%s", totalNumber, "%")
         }
     }
 }

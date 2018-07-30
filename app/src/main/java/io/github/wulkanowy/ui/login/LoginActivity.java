@@ -25,8 +25,9 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
-import io.github.wulkanowy.utils.CommonUtils;
 import io.github.wulkanowy.utils.KeyboardUtils;
+
+import static io.github.wulkanowy.utils.CommonUtilsKt.openInternalBrowserViewer;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
@@ -94,12 +95,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @OnClick(R.id.login_activity_create_text)
     void onCreateAccountButtonClick() {
-        CommonUtils.openInternalBrowserViewer(this, AppConstant.VULCAN_CREATE_ACCOUNT_URL);
+        openInternalBrowserViewer(this, AppConstant.VULCAN_CREATE_ACCOUNT_URL);
     }
 
     @OnClick(R.id.login_activity_forgot_text)
     void onForgotPasswordButtonClick() {
-        CommonUtils.openInternalBrowserViewer(this, AppConstant.VULCAN_FORGOT_PASS_URL);
+        openInternalBrowserViewer(this, AppConstant.VULCAN_FORGOT_PASS_URL);
     }
 
     @Override

@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/attendance_fragment_summary_text"
                 android:layout_centerHorizontal="true"
-                android:text="99%"
+                android:text="@string/attendance_text"
                 android:textSize="21sp" />
         </RelativeLayout>
 

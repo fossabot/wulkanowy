@@ -15,8 +15,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
-import io.github.wulkanowy.utils.CommonUtils;
 import io.github.wulkanowy.utils.GradeUtils;
+
+import static io.github.wulkanowy.utils.CommonUtilsKt.colorHexToColorName;
 
 public class GradesDialogFragment extends DialogFragment {
 
@@ -80,7 +81,7 @@ public class GradesDialogFragment extends DialogFragment {
         value.setBackgroundResource(GradeUtils.getValueColor(grade.getValue()));
         weight.setText(grade.getWeight());
         date.setText(grade.getDate());
-        color.setText(CommonUtils.colorHexToColorName(grade.getColor()));
+        color.setText(colorHexToColorName(grade.getColor()));
         teacher.setText(getTeacherString());
         description.setText(getDescriptionString());
 

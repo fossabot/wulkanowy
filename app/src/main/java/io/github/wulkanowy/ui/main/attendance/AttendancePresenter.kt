@@ -5,6 +5,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener
 import io.github.wulkanowy.utils.async.AbstractTask
 import io.github.wulkanowy.utils.async.AsyncListeners
+import io.github.wulkanowy.utils.calculateAttendanceFromTypes
 import io.github.wulkanowy.utils.getFirstDayOfCurrentWeek
 import io.github.wulkanowy.utils.getMondaysFromCurrentSchoolYear
 import java.util.*
@@ -18,6 +19,8 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
     private var dates: List<String> = ArrayList()
 
     private val summarySubItems = ArrayList<AttendanceSummarySubItem>()
+
+    private var totalAttendance = 0.0
 
     private var listener: OnFragmentIsReadyListener? = null
 
@@ -64,12 +67,14 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
         val subjects = repository.dbRepo.attendanceSubjects
         val types = repository.dbRepo.getAttendanceStatistics(subjects[0].realId)
 
-        if (types.isEmpty()) { return }
+        if (types.isEmpty()) return
+
+        totalAttendance = calculateAttendanceFromTypes(types)
 
         types.sortByDescending { it.order }
 
         types.groupBy { it.month }.map {
-            val summaryHeader = AttendanceSummaryHeader(it.key)
+            val summaryHeader = AttendanceSummaryHeader(it.key, calculateAttendanceFromTypes(it.value))
             it.value.mapTo(summarySubItems) {
                 AttendanceSummarySubItem(summaryHeader, Pair(it.name, it.value))
             }
@@ -86,6 +91,7 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
             view.setThemeForTab(positionToScroll)
             view.scrollViewPagerToPosition(positionToScroll)
             view.updateSummaryAdapterList(summarySubItems)
+            view.setTotalAttendance(totalAttendance)
             listener!!.onFragmentIsReady()
         }
     }

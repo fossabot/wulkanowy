@@ -12,7 +12,7 @@ import io.github.wulkanowy.R
 
 class AttendanceSummarySubItem(header: AttendanceSummaryHeader, val type: Pair<String, Int>) : AbstractSectionableItem<AttendanceSummarySubItem.SubItemViewHolder, AttendanceSummaryHeader>(header) {
 
-    override fun equals(o: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
         return false
     }
 

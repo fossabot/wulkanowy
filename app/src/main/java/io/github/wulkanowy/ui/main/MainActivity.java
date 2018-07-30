@@ -27,7 +27,8 @@ import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
-import io.github.wulkanowy.utils.CommonUtils;
+
+import static io.github.wulkanowy.utils.CommonUtilsKt.getThemeAttrColor;
 
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
@@ -129,8 +130,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
                 R.drawable.ic_menu_other_24dp));
 
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
-        bottomNavigation.setInactiveColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiary));
-        bottomNavigation.setDefaultBackgroundColor(CommonUtils.getThemeAttrColor(this, R.attr.bottomNavBackground));
+        bottomNavigation.setInactiveColor(getThemeAttrColor(this, android.R.attr.textColorTertiary));
+        bottomNavigation.setDefaultBackgroundColor(getThemeAttrColor(this, R.attr.bottomNavBackground));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setCurrentItem(tabPosition);

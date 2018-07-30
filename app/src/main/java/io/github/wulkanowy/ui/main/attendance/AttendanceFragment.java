@@ -12,8 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -54,6 +56,9 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @BindView(R.id.attendance_fragment_summary_recycler)
     RecyclerView summaryRecyclerView;
 
+    @BindView(R.id.attendance_fragment_summary_value)
+    TextView totalAttendance;
+
     @Inject
     AttendanceContract.Presenter presenter;
 
@@ -92,6 +97,11 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @Override
     public void updateSummaryAdapterList(List<AttendanceSummarySubItem> summarySubItems) {
         summaryAdapter.updateDataSet(summarySubItems);
+    }
+
+    @Override
+    public void setTotalAttendance(double total) {
+        totalAttendance.setText(String.format(Locale.getDefault(), "%.2f%s", total, "%"));
     }
 
     @Override
