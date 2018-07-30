@@ -24,42 +24,48 @@
             android:layout_below="@id/attendance_fragment_tab_layout" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/attendance_fragment_summary_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/attendance_fragment_summary_value_container"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:id="@+id/attendance_fragment_summary_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/summary_attendance_all"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/attendance_fragment_summary_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/attendance_fragment_summary_text"
-                android:layout_centerHorizontal="true"
-                android:text="@string/attendance_text"
-                android:textSize="21sp" />
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/attendance_fragment_summary_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/attendance_fragment_summary_value_container"
-            android:layout_marginTop="20dp" />
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants">
+
+            <RelativeLayout
+                android:id="@+id/attendance_fragment_summary_value_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/attendance_fragment_summary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/summary_attendance_all"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/attendance_fragment_summary_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/attendance_fragment_summary_text"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/attendance_text"
+                    android:textSize="21sp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/attendance_fragment_summary_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/attendance_fragment_summary_value_container"
+                android:layout_marginTop="20dp" />
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
