@@ -100,10 +100,9 @@ class MessagesPresenter @Inject constructor(repo: RepositoryContract) : BasePres
     }
 
     private fun getMappedMessage(e: MessageEntity): Message {
-        val subject = if (e.subject.isNotBlank()) "Temat: " + e.subject + "\n\n" else ""
         return Message(
                 e.realId.toString(),
-                subject + e.content.trim(),
+                (if (e.subject.isNotBlank()) "Temat: " + e.subject + "\n\n" else "") + e.content.trim(),
                 getDate(getDateAsTick(e.date, "yyyy-MM-dd HH:mm:ss")),
                 User(if (e.folderId != Messages.SENT_FOLDER) e.senderID.toString() else "0", e.sender, e.sender)
         )

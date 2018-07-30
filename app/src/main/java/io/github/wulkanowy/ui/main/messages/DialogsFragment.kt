@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.main.messages
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
-import com.amulyakhare.textdrawable.TextDrawable
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsList
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter
@@ -31,11 +29,6 @@ class DialogsFragment : BaseFragment(), DialogsContract.View, DialogsListAdapter
 
     @BindView(R.id.messages_fragment_swipe_refresh)
     lateinit var refreshLayout: SwipeRefreshLayout
-
-    private val imageLoader = ImageLoader { imageView, name ->
-        val letters = name?.split(" ")?.map { it.substring(0, 1) }
-        imageView.setImageDrawable(TextDrawable.builder().buildRect(letters?.getOrElse(0) {"J"} + letters?.getOrElse(1) {"A"}, Color.DKGRAY))
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_messages, container, false)
@@ -62,7 +55,7 @@ class DialogsFragment : BaseFragment(), DialogsContract.View, DialogsListAdapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        dialogsAdapter = DialogsListAdapter(imageLoader)
+        dialogsAdapter = DialogsListAdapter(null)
 
         dialogsAdapter.setOnDialogClickListener(this)
         dialogsAdapter.setOnDialogLongClickListener(this)
