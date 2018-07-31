@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,8 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,9 +32,8 @@ import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 import io.github.wulkanowy.ui.main.attendance.tab.AttendanceTabFragment;
-import io.github.wulkanowy.ui.main.grades.GradesSummarySubItem;
 
-public class AttendanceFragment extends BaseFragment implements AttendanceContract.View {
+public class AttendanceFragment extends BaseFragment implements AttendanceContract.View, AdapterView.OnItemSelectedListener {
 
     private static final String CURRENT_ITEM_KEY = "CurrentItem";
 
@@ -59,6 +62,11 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @BindView(R.id.attendance_fragment_summary_value)
     TextView totalAttendance;
 
+    @BindView(R.id.attendance_fragment_subject_chooser)
+    AppCompatSpinner subjectChooser;
+
+    ArrayAdapter<String> subjectsAdapter;
+
     @Inject
     AttendanceContract.Presenter presenter;
 
@@ -74,6 +82,12 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
         if (savedInstanceState != null) {
             presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
         }
+
+        subjectsAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, new ArrayList<String>());
+        subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subjectChooser.setAdapter(subjectsAdapter);
+        subjectChooser.setOnItemSelectedListener(this);
+
         return view;
     }
 
@@ -95,7 +109,13 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.attendance_action_menu, menu);
+    }
+
+    @Override
     public void updateSummaryAdapterList(List<AttendanceSummarySubItem> summarySubItems) {
+        summaryAdapter.clear();
         summaryAdapter.updateDataSet(summarySubItems);
     }
 
@@ -105,8 +125,20 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.attendance_action_menu, menu);
+    public void setSubjects(String[] items) {
+        subjectsAdapter.clear();
+        subjectsAdapter.addAll(items);
+        subjectsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        presenter.reloadStatistics(((TextView) view).getText().toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // do nothing
     }
 
     @Override
@@ -162,7 +194,7 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(CURRENT_ITEM_KEY, viewPager.getCurrentItem());
         super.onSaveInstanceState(outState);
     }

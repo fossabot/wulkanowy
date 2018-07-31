@@ -20,6 +20,8 @@ public interface AttendanceContract {
 
         void setTotalAttendance(double total);
 
+        void setSubjects(String[] items);
+
         void setTabDataToAdapter(String date);
 
         void setAdapterWithTabLayout();
@@ -36,5 +38,7 @@ public interface AttendanceContract {
         void attachView(@NonNull View view, OnFragmentIsReadyListener listener);
 
         void setRestoredPosition(int position);
+
+        void reloadStatistics(String name);
     }
 }

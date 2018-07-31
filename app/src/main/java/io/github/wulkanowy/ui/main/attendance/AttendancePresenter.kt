@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.main.attendance
 
 import io.github.wulkanowy.data.RepositoryContract
+import io.github.wulkanowy.data.db.dao.entities.AttendanceSubject
+import io.github.wulkanowy.data.db.dao.entities.AttendanceType
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener
 import io.github.wulkanowy.utils.async.AbstractTask
@@ -12,21 +14,28 @@ import java.util.*
 import javax.inject.Inject
 
 class AttendancePresenter @Inject
-internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceContract.View>(repository), AttendanceContract.Presenter, AsyncListeners.OnFirstLoadingListener {
+internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceContract.View>(repository),
+        AttendanceContract.Presenter, AsyncListeners.OnFirstLoadingListener, AsyncListeners.OnRefreshListener {
 
     private var loadingTask: AbstractTask? = null
 
+    private var refreshTask: AbstractTask? = null
+
+    private var isFirstSight = false
+
+    private lateinit var listener: OnFragmentIsReadyListener
+
     private var dates: List<String> = ArrayList()
+
+    private var positionToScroll = 0
 
     private val summarySubItems = ArrayList<AttendanceSummarySubItem>()
 
     private var totalAttendance = 0.0
 
-    private var listener: OnFragmentIsReadyListener? = null
+    private var subjects = mutableListOf<AttendanceSubject>()
 
-    private var positionToScroll = 0
-
-    private var isFirstSight = false
+    private var subjectName = "Wszystkie"
 
     override fun attachView(view: AttendanceContract.View, listener: OnFragmentIsReadyListener) {
         super.attachView(view)
@@ -59,26 +68,26 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
         }
     }
 
+    override fun reloadStatistics(name: String) {
+        subjectName = name
+        refreshTask = AbstractTask()
+        refreshTask!!.setOnRefreshListener(this)
+        refreshTask!!.execute()
+    }
+
+    // first load
     override fun onDoInBackgroundLoading() {
         for (date in dates) {
             view.setTabDataToAdapter(date)
         }
 
-        val subjects = repository.dbRepo.attendanceSubjects
-        val types = repository.dbRepo.getAttendanceStatistics(subjects[0].realId)
+        subjects = repository.dbRepo.attendanceSubjects
+
+        val types = repository.dbRepo.getAttendanceStatistics(-1)
 
         if (types.isEmpty()) return
 
-        totalAttendance = calculateAttendanceFromTypes(types)
-
-        types.sortByDescending { it.order }
-
-        types.groupBy { it.month }.map {
-            val summaryHeader = AttendanceSummaryHeader(it.key, calculateAttendanceFromTypes(it.value))
-            it.value.mapTo(summarySubItems) {
-                AttendanceSummarySubItem(summaryHeader, Pair(it.name, it.value))
-            }
-        }
+        updateSummary(types)
     }
 
     override fun onCanceledLoadingAsync() {
@@ -92,7 +101,49 @@ internal constructor(repository: RepositoryContract) : BasePresenter<AttendanceC
             view.scrollViewPagerToPosition(positionToScroll)
             view.updateSummaryAdapterList(summarySubItems)
             view.setTotalAttendance(totalAttendance)
-            listener!!.onFragmentIsReady()
+            view.setSubjects(subjects.map {
+                it.name
+            }.toTypedArray())
+        }
+        listener.onFragmentIsReady()
+    }
+
+    // refresh
+    override fun onDoInBackgroundRefresh() {
+        summarySubItems.clear()
+        val subjectId = subjects.first { it.name == subjectName }.realId
+        var types = repository.dbRepo.getAttendanceStatistics(subjectId)
+
+        if (types.isEmpty()) {
+            repository.syncRepo.syncAttendanceStatistics(subjectId)
+            types = repository.dbRepo.getAttendanceStatistics(subjectId)
+        }
+
+        updateSummary(types)
+    }
+
+    override fun onCanceledRefreshAsync() {
+        //do nothing
+    }
+
+    override fun onEndRefreshAsync(result: Boolean, exception: java.lang.Exception?) {
+        if (result) {
+            view.updateSummaryAdapterList(summarySubItems)
+            view.setTotalAttendance(totalAttendance)
+        }
+        listener.onFragmentIsReady()
+    }
+
+    private fun updateSummary(types: MutableList<AttendanceType>) {
+        totalAttendance = calculateAttendanceFromTypes(types)
+
+        types.sortByDescending { it.order }
+
+        types.groupBy { it.month }.map {
+            val summaryHeader = AttendanceSummaryHeader(it.key, calculateAttendanceFromTypes(it.value))
+            it.value.mapTo(summarySubItems) {
+                AttendanceSummarySubItem(summaryHeader, Pair(it.name, it.value))
+            }
         }
     }
 
