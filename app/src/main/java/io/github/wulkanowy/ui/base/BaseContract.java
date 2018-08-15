@@ -9,13 +9,11 @@ public interface BaseContract {
         void showMessage(@NonNull String text);
 
         void showNoNetworkMessage();
-
-        boolean isNetworkConnected();
     }
 
-    interface Presenter<V extends View> {
+    interface Presenter<T extends View> {
 
-        void attachView(@NonNull V view);
+        void attachView(@NonNull T view);
 
         void detachView();
     }

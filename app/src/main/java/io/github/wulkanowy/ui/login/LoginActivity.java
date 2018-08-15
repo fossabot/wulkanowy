@@ -23,7 +23,6 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
-import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.CommonUtils;
 import io.github.wulkanowy.utils.KeyboardUtils;
@@ -173,7 +172,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void openMainActivity() {
-        startActivity(MainActivity.getStartIntent(this));
+        //startActivity(MainActivity.getStartIntent(this));
         finish();
     }
 

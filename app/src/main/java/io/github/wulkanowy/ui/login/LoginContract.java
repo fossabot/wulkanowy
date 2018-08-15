@@ -40,15 +40,5 @@ public interface LoginContract {
     interface Presenter extends BaseContract.Presenter<View> {
 
         void attemptLogin(String email, String password, String symbol);
-
-        void onStartAsync();
-
-        void onDoInBackground(int stepNumber) throws Exception;
-
-        void onLoginProgress(int step);
-
-        void onEndAsync(int success, Exception exception);
-
-        void onCanceledAsync();
     }
 }

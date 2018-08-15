@@ -11,7 +11,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.utils.NetworkUtils;
 
 public abstract class BaseActivity extends DaggerAppCompatActivity implements BaseContract.View {
 
@@ -37,11 +36,6 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
     @Override
     public void showNoNetworkMessage() {
         showMessage(getString(R.string.noInternet_text));
-    }
-
-    @Override
-    public boolean isNetworkConnected() {
-        return NetworkUtils.isOnline(getApplicationContext());
     }
 
     protected View getMessageView() {

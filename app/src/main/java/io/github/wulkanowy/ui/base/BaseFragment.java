@@ -7,7 +7,6 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
-import io.github.wulkanowy.utils.NetworkUtils;
 
 public abstract class BaseFragment extends DaggerFragment implements BaseContract.View {
 
@@ -47,10 +46,5 @@ public abstract class BaseFragment extends DaggerFragment implements BaseContrac
         if (getActivity() != null) {
             ((BaseActivity) getActivity()).showNoNetworkMessage();
         }
-    }
-
-    @Override
-    public boolean isNetworkConnected() {
-        return NetworkUtils.isOnline(getContext());
     }
 }
