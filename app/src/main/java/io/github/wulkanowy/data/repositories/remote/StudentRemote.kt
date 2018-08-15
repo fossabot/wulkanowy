@@ -12,31 +12,27 @@ class StudentRemote @Inject constructor(private val api: Vulcan) {
     fun getConnectedStudents(email: String, password: String): Single<List<Student>> {
         return Single.fromCallable {
             initApi(email, password)
-            var students: List<Student> = listOf()
-
-            for (symbol in getSymbols()) {
-                initApi(email, password, symbol)
+            getSymbols().mapNotNull { symbol ->
                 try {
-                    for (school in api.schools) {
+                    initApi(email, password, symbol)
+                    api.schools.flatMap { school ->
                         initApi(email, password, symbol, school.id)
-
-                        students += api.studentAndParent.students.map {
+                        api.studentAndParent.students.map { student ->
                             Student(
                                     email = email,
                                     password = password,
                                     symbol = symbol,
-                                    studentId = it.id.toLong(),
-                                    studentName = it.name,
+                                    studentId = student.id.toLong(),
+                                    studentName = student.name,
                                     schoolId = school.id.toLong(),
                                     schoolName = school.name
                             )
                         }
                     }
                 } catch (e: AccountPermissionException) {
-                    continue
+                    null
                 }
-            }
-            return@fromCallable students
+            }.flatten()
         }
     }
 

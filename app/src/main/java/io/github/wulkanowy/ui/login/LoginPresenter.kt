@@ -33,6 +33,11 @@ class LoginPresenter @Inject constructor(disposable: CompositeDisposable,
             return
         }
 
+        studentRepository.getConnectedStudents(email, password)
+                .observeOn(schedulers.mainThread())
+                .subscribeOn(schedulers.backgroundThread())
+                .subscribe { students -> }
+
         view?.hideSoftInput()
     }
 
