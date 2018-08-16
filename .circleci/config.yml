@@ -34,11 +34,6 @@ jobs:
           name: Setup environment
           command: ./gradlew dependencies --no-daemon --stacktrace --console=plain -PdisablePreDex || true
       - run:
-          name: Decrypt keys
-          command: |
-            openssl aes-256-cbc -d -in ./app/key-encrypted.p12 -k $ENCRYPT_KEY >> ./app/key.p12
-            openssl aes-256-cbc -d -in ./app/upload-key-encrypted.jks -k $ENCRYPT_KEY >> ./app/upload-key.jks
-      - run:
           name: Initial build
           command: ./gradlew build assembleDebug -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
