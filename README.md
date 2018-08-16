@@ -17,4 +17,5 @@ Androidowy klient dziennika VULCAN UONET+.
 
 
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy?ref=badge_large)
