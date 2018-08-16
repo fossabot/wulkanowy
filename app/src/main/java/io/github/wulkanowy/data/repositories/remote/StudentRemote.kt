@@ -37,10 +37,10 @@ class StudentRemote @Inject constructor(private val api: Vulcan) {
     }
 
     private fun initApi(email: String, password: String, symbol: String = "Deafult",
-                        schoolId: String? = null, studentId: String? = null) {
+                        schoolId: String? = null) {
         api.apply {
             logout()
-            setCredentials(email, password, symbol, schoolId, studentId, null)
+            setCredentials(email, password, symbol, schoolId, null, null)
         }
     }
 
