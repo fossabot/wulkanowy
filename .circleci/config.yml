@@ -35,13 +35,10 @@ jobs:
           command: ./gradlew dependencies --no-daemon --stacktrace --console=plain -PdisablePreDex || true
       - run:
           name: Initial build
-          command: ./gradlew build assembleDebug -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew build -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Run FOSSA
           command: fossa
-      - store_artifacts:
-          path: ./app/build/outputs/apk/
-          destination: apks/
       - persist_to_workspace:
           root: *workspace_root
           paths:
@@ -166,7 +163,7 @@ jobs:
           command: ./gradlew jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Run sonarqube runner
-          command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$CIRCLE_BRANCH --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: [[ -v CIRCLE_PR_NUMBER ]] && ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$CIRCLE_BRANCH --no-daemon --stacktrace --console=plain -PdisablePreDex || true
 
   deploy:
     <<: *container_config
