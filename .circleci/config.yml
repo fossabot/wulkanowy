@@ -40,7 +40,7 @@ jobs:
             openssl aes-256-cbc -d -in ./app/upload-key-encrypted.jks -k $ENCRYPT_KEY >> ./app/upload-key.jks
       - run:
           name: Initial build
-          command: ./gradlew build assembleDebug -x test -x lint -x fabricGenerateResourcesRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew build assembleDebug -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Clear keys
           command: |
