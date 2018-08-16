@@ -37,10 +37,6 @@ jobs:
           name: Initial build
           command: ./gradlew build assembleDebug -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
-          name: Clear keys
-          command: |
-            rm ./app/key.p12 ./app/upload-key.jks
-      - run:
           name: Run FOSSA
           command: fossa
       - store_artifacts:
