@@ -25,6 +25,8 @@ jobs:
   build:
     <<: *container_config
     steps:
+      - run: |
+          curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash
       - checkout
       - restore_cache:
           <<: *general_cache_key
@@ -43,6 +45,9 @@ jobs:
           name: Clear keys
           command: |
             rm ./app/key.p12 ./app/upload-key.jks
+      - run:
+          name: Run FOSSA
+          command: fossa
       - store_artifacts:
           path: ./app/build/outputs/apk/
           destination: apks/
