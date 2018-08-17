@@ -7,7 +7,7 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/wulkanowy/wulkanowy.svg?style=flat-square)](https://scrutinizer-ci.com/g/wulkanowy/wulkanowy/?branch=master)
 [![Bintray](https://img.shields.io/bintray/v/wulkanowy/wulkanowy/api.svg?style=flat-square)](https://bintray.com/wulkanowy/wulkanowy/api)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.io/api/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git.svg?type=shield)](https://app.fossa.io/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git?ref=badge_shield)
 
 [Pobierz wersję beta](https://play.google.com/store/apps/details?id=io.github.wulkanowy&amp;utm_source=vcs)
 
@@ -18,4 +18,4 @@ Androidowy klient dziennika VULCAN UONET+.
 
 ## License
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwulkanowy%2Fwulkanowy?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git.svg?type=large)](https://app.fossa.io/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git?ref=badge_large)
